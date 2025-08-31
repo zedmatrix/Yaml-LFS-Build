@@ -1,0 +1,18 @@
+package:
+    name: kmod
+    version: 34.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-34.2.tar.xz
+      md5: 36f2cc483745e81ede3406fa55e1065a
+
+prepare: |
+    meson setup zbuild --prefix=/usr --buildtype=release -D manpages=false
+
+build: |
+    ninja -C zbuild
+
+install: |
+    ninja -C zbuild install

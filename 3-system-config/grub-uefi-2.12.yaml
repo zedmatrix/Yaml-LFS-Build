@@ -1,0 +1,27 @@
+package:
+    name: grub-uefi
+    version: 2.12
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/grub/grub-2.12.tar.xz
+      md5: 60c564b1bdc39d8e43b3aab4bc0fb140
+    - url: https://unifoundry.com/pub/unifont/unifont-16.0.01/font-builds/unifont-16.0.01.pcf.gz
+      md5: 007ffa7aab47ed3f270caee84d12148b
+
+prepare: |
+    mkdir -pv /usr/share/fonts/unifont &&
+    gunzip -c $YSRC/unifont-16.0.01.pcf.gz > /usr/share/fonts/unifont/unifont.pcf &&
+    echo depends bli part_gpt > grub-core/extra_deps.lst
+
+build: |
+    unset {C,CPP,CXX,LD}FLAGS && ./configure --prefix=/usr --sysconfdir=/etc \
+    --disable-efiemu --with-platform=efi --target=x86_64 --disable-werror &&
+    make
+
+install: |
+    make -C grub-core install &&
+    install -vm755 grub-mkfont /usr/bin/ &&
+    install -vm644 ascii.h widthspec.h *.pf2 /usr/share/grub/ &&
+    install -vm755 grub-mount /usr/bin/

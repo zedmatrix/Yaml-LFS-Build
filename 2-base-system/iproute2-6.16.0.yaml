@@ -1,0 +1,20 @@
+package:
+    name: iproute2
+    version: 6.16.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.kernel.org/pub/linux/utils/net/iproute2/iproute2-6.16.0.tar.xz
+      md5: 80e1f91bf59d572acc15d5c6eb4f3e7c
+
+prepare: |
+    sed -i /ARPD/d Makefile &&
+    rm -fv man/man8/arpd.8
+
+build: |
+    make NETNS_RUN_DIR=/run/netns
+
+install: |
+    make SBINDIR=/usr/sbin install &&
+    install -vDm644 COPYING README* -t /usr/share/doc/iproute2-6.16.0

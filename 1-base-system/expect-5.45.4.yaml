@@ -1,0 +1,25 @@
+package:
+    name: expect
+    version: 5.45.4
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://prdownloads.sourceforge.net/expect/expect5.45.4.tar.gz
+      md5: 00fce8de158422f5ccd2666512329bd2
+
+patches:
+    - url: https://www.linuxfromscratch.org/patches/lfs/development/expect-5.45.4-gcc15-1.patch
+      md5: 0ca4d6bb8d572fbcdb13cb36cd34833e
+
+prepare: |
+    python3 -c 'from pty import spawn; spawn(["echo", "ok"])' &&
+    ./configure --prefix=/usr --with-tcl=/usr/lib --enable-shared \
+    --disable-rpath --mandir=/usr/share/man --with-tclinclude=/usr/include
+
+build: |
+    make
+
+install: |
+    make install &&
+    ln -svf expect5.45.4/libexpect5.45.4.so /usr/lib

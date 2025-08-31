@@ -1,0 +1,22 @@
+package:
+    name: binutils-temp2
+    version: 2.45
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://sourceware.org/pub/binutils/releases/binutils-2.45.tar.xz
+      md5: dee5b4267e0305a99a3c9d6131f45759
+
+prepare: |
+    sed '6031s/$add_dir//' -i ltmain.sh &&
+    mkdir -v build && cd build && ../configure --prefix=/usr --build=$(../config.guess) \
+    --host=$LFS_TGT --disable-nls --enable-shared --enable-gprofng=no --disable-werror --enable-64-bit-bfd \
+    --enable-new-dtags --enable-default-hash-style=gnu
+
+build: |
+    cd build && make
+
+install: |
+    cd build && make DESTDIR=$LFS install &&
+    rm -v $LFS/usr/lib/lib{bfd,ctf,ctf-nobfd,opcodes,sframe}.{a,la}

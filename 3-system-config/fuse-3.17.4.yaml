@@ -1,0 +1,24 @@
+package:
+    name: fuse
+    version: 3.17.4
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/libfuse/libfuse/releases/download/fuse-3.17.4/fuse-3.17.4.tar.gz
+      md5: c894181418bf0bc11f98938fc30d37df
+
+prepare: |
+    sed -i '/^udev/,$ s/^/#/' util/meson.build &&
+    meson setup ybuild --prefix=/usr --buildtype=release
+
+build: |
+    ninja -C ybuild
+
+install: |
+    ninja -C ybuild install &&
+    chmod u+s /usr/bin/fusermount3
+
+final: |
+    cp -Rv doc/html -T /usr/share/doc/fuse-3.17.4 &&
+    install -v -m644 doc/{README.NFS,kernel.txt} /usr/share/doc/fuse-3.17.4

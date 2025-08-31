@@ -1,0 +1,34 @@
+package:
+    name: nano
+    version: 8.6
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.nano-editor.org/dist/v8/nano-8.6.tar.xz
+      md5: 3b5a70dd65ddee4bd848b620c1638526
+
+build: |
+    ./configure --prefix=/usr --build=$(./config.guess) --sysconfdir=/etc \
+    --enable-utf8 --docdir=/usr/share/doc/nano-8.6 &&
+    make
+
+install: |
+    make install &&
+    install -v -m644 doc/{nano.html,sample.nanorc} /usr/share/doc/nano-8.6 &&
+    cat > $LFS/etc/nanorc << "EOF"
+set autoindent
+# set boldtext
+set constantshow
+set fill 72
+set historylog
+set indicator
+set multibuffer
+set positionlog
+set quickblank
+set regexp
+# set softwrap
+set tabsize 4
+
+include /usr/share/nano/sh.nanorc
+include /usr/share/nano/yaml.nanorc

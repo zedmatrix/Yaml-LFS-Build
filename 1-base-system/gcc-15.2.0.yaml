@@ -1,0 +1,25 @@
+package:
+    name: gcc
+    version: 15.2.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz
+      md5: b861b092bf1af683c46a8aa2e689a6fd
+
+prepare: |
+    sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64 &&
+    mkdir -v zbuild && cd zbuild &&
+    ../configure --prefix=/usr LD=ld --enable-languages=c,c++ --enable-default-pie \
+    --enable-default-ssp --enable-host-pie --disable-multilib \
+    --disable-bootstrap --disable-fixincludes --with-system-zlib
+
+build: |
+    cd zbuild && make
+
+install: |
+    cd zbuild && make install &&
+    ln -svr /usr/bin/cpp /usr/lib &&
+    ln -sv gcc.1 /usr/share/man/man1/cc.1
+    ln -sfv ../../libexec/gcc/$(gcc -dumpmachine)/15.2.0/liblto_plugin.so /usr/lib/bfd-plugins/

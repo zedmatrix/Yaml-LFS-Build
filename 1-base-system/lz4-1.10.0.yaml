@@ -1,0 +1,15 @@
+package:
+    name: lz4
+    version: 1.10.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/lz4/lz4/releases/download/v1.10.0/lz4-1.10.0.tar.gz
+      md5: dead9f5f1966d9ae56e1e32761e4e675
+
+build: |
+    make BUILD_STATIC=no PREFIX=/usr
+
+install: |
+    make BUILD_STATIC=no PREFIX=/usr install

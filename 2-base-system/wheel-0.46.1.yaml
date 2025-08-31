@@ -1,0 +1,15 @@
+package:
+    name: wheel
+    version: 0.46.1
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://pypi.org/packages/source/w/wheel/wheel-0.46.1.tar.gz
+      md5: 65e09ee84af36821e3b1e9564aa91bd5
+
+build: |
+    pip3 wheel -w dist --no-cache-dir --no-build-isolation --no-deps $PWD
+
+install: |
+    pip3 install --no-index --find-links dist wheel

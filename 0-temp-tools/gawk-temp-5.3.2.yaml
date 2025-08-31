@@ -1,0 +1,20 @@
+package:
+    name: gawk-temp
+    version: 5.3.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gawk/gawk-5.3.2.tar.xz
+      md5: b7014650c5f45e5d4837c31209dc0037
+
+
+prepare: |
+    sed -i 's/extras//' Makefile.in
+
+build: |
+    ./configure --prefix=/usr --host=$LFS_TGT --build=$(build-aux/config.guess) &&
+    make
+
+install: |
+    make DESTDIR=$LFS install

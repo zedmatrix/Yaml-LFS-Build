@@ -1,0 +1,22 @@
+package:
+    name: texinfo
+    version: 7.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/texinfo/texinfo-7.2.tar.xz
+      md5: 11939a7624572814912a18e76c8d8972
+
+prepare: |
+    sed 's/! $output_file eq/$output_file ne/' -i tp/Texinfo/Convert/*.pm
+
+build: |
+    ./configure --prefix=/usr &&
+    make
+
+install: |
+    make install
+
+final: |
+    make TEXMF=/usr/share/texmf install-tex

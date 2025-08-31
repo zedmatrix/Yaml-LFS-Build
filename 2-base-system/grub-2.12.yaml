@@ -1,0 +1,21 @@
+package:
+    name: grub
+    version: 2.12
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/grub/grub-2.12.tar.xz
+      md5: 60c564b1bdc39d8e43b3aab4bc0fb140
+
+prepare: |
+    echo depends bli part_gpt > grub-core/extra_deps.lst
+
+build: |
+    unset {C,CPP,CXX,LD}FLAGS && ./configure --prefix=/usr --sysconfdir=/etc \
+    --disable-efiemu --disable-werror &&
+    make
+
+install: |
+    make install &&
+    mv -v /etc/bash_completion.d/grub /usr/share/bash-completion/completions

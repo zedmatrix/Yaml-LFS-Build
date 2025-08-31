@@ -1,0 +1,17 @@
+package:
+    name: wget
+    version: 1.25.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/wget/wget-1.25.0.tar.gz
+      md5: c70ba58b36f944e8ba1d655ace552881
+
+build: |
+    export OPENSSL_CFLAGS="-I/usr/include" &&
+    export OPENSSL_LIBS="-L/usr/lib -lssl -lcrypto" &&
+    ./configure --prefix=/usr --sysconfdir=/etc --with-ssl=openssl && make
+
+install: |
+    make install

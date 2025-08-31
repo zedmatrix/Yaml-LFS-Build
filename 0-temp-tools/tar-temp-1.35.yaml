@@ -1,0 +1,16 @@
+package:
+    name: tar-temp
+    version: 1.35
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/tar/tar-1.35.tar.xz
+      md5: a2d8042658cfd8ea939e6d911eaf4152
+
+build: |
+    ./configure --prefix=/usr --host=$LFS_TGT --build=$(build-aux/config.guess) &&
+    make
+
+install: |
+    make DESTDIR=$LFS install

@@ -1,0 +1,18 @@
+package:
+    name: openssl
+    version: 3.5.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz
+      md5: 890fc59f86fc21b5e4d1c031a698dbde
+
+build: |
+    ./config --prefix=/usr --openssldir=/etc/ssl --libdir=lib shared zlib-dynamic &&
+    make
+
+install: |
+    make MANSUFFIX=ssl install &&
+    mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.5.2 &&
+    cp -vfr doc/* /usr/share/doc/openssl-3.5.2

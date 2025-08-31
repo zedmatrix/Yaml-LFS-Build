@@ -1,0 +1,12 @@
+pkgdir=[which-2.23]
+pkgname=[which]
+pkgver=[2.23]
+pkgrel=[1]
+zarchive=[false]
+
+pkgurl=[https://ftp.gnu.org/gnu/which/which-2.23.tar.gz]
+md5sum=[1963b85914132d78373f02a84cdb3c86]
+
+build=[./configure --prefix=/usr && make]
+
+install=[make install]

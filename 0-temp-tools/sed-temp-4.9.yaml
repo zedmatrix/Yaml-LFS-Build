@@ -1,0 +1,16 @@
+package:
+    name: sed-temp
+    version: 4.9
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz
+      md5: 6aac9b2dbafcd5b7a67a8a9bcb8036c3
+
+build: |
+    ./configure --prefix=/usr --host=$LFS_TGT --build=$(./build-aux/config.guess) &&
+    make
+
+install: |
+    make DESTDIR=$LFS install

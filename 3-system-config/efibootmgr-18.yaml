@@ -1,0 +1,15 @@
+package:
+    name: efibootmgr
+    version: 18
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/rhboot/efibootmgr/archive/18/efibootmgr-18.tar.gz
+      md5: e170147da25e1d5f72721ffc46fe4e06
+
+build: |
+    make EFIDIR=LFS EFI_LOADER=grubx64.efi
+
+install: |
+    make install EFIDIR=LFS

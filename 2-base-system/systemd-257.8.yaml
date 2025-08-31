@@ -1,0 +1,30 @@
+package:
+    name: systemd
+    version: 257.8
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/systemd/systemd/archive/v257.8/systemd-257.8.tar.gz
+      md5: 25fe5d328e22641254761f1baa74cee0
+    - url: https://anduin.linuxfromscratch.org/LFS/systemd-man-pages-257.8.tar.xz
+      md5: a44063e2ec0cf4adfd2ed5c9e9e095c5
+
+prepare: |
+    sed -e 's/GROUP="render"/GROUP="video"/' -e 's/GROUP="sgx", //' -i rules.d/50-udev-default.rules.in &&
+    meson setup zbuild --prefix=/usr --buildtype=release -D default-dnssec=no -D firstboot=false \
+    -D install-tests=false -D ldconfig=false -D sysusers=false -D rpmmacrosdir=no -D homed=disabled \
+    -D userdb=false -D man=disabled -D mode=release -D pamconfdir=no -D dev-kvm-mode=0660 \
+    -D nobody-group=nogroup -D sysupdate=disabled -D ukify=disabled -D docdir=/usr/share/doc/systemd-257.8
+
+build: |
+    ninja -C zbuild
+
+install: |
+    ninja -C zbuild install
+
+final: |
+    tar -xf $YSRC/systemd-man-pages-257.8.tar.xz --no-same-owner \
+    --strip-components=1 -C /usr/share/man &&
+    systemd-machine-id-setup &&
+    systemctl preset-all

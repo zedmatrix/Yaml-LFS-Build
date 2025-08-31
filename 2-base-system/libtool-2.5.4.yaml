@@ -1,0 +1,16 @@
+package:
+    name: libtool
+    version: 2.5.4
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/libtool/libtool-2.5.4.tar.xz
+      md5: 22e0a29df8af5fdde276ea3a7d351d30
+
+build: |
+    ./configure --prefix=/usr && make
+
+install: |
+    make install &&
+    rm -fv /usr/lib/libltdl.a

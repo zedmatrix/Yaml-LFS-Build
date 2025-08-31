@@ -1,0 +1,15 @@
+package:
+    name: libidn2
+    version: 2.3.8
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz
+      md5: a8e113e040d57a523684e141970eea7a
+
+build: |
+    ./configure --prefix=/usr --disable-static && make
+
+install: |
+    make install

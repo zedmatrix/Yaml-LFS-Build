@@ -1,0 +1,16 @@
+package:
+    name: gperf
+    version: 3.3
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gperf/gperf-3.3.tar.gz
+      md5: 31753b021ea78a21f154bf9eecb8b079
+
+build: |
+    ./configure --prefix=/usr --docdir=/usr/share/doc/gperf-3.3 &&
+    make
+
+install: |
+    make install

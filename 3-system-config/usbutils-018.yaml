@@ -1,0 +1,18 @@
+package:
+    name: usbutils
+    version: 018
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://kernel.org/pub/linux/utils/usb/usbutils/usbutils-018.tar.xz
+      md5: 0a351e2241c50a1f026a455dccf24d73
+
+prepare: |
+    meson setup ybuild --prefix=/usr --buildtype=release
+
+build: |
+    ninja -C ybuild
+
+install: |
+    ninja -C ybuild install

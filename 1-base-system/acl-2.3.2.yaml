@@ -1,0 +1,15 @@
+package:
+    name: acl
+    version: 2.3.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://download.savannah.gnu.org/releases/acl/acl-2.3.2.tar.xz
+      md5: 590765dee95907dbc3c856f7255bd669
+
+build: |
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/acl-2.3.2 && make
+
+install: |
+    make install

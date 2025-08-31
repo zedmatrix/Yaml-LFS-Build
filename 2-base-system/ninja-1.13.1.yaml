@@ -1,0 +1,23 @@
+package:
+    name: ninja
+    version: 1.13.1
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/ninja-build/ninja/archive/v1.13.1/ninja-1.13.1.tar.gz
+      md5: c35f8f55f4cf60f1a916068d8f45a0f8
+
+patches:
+    - url: /ybuild/sources/ninjajobs.patch
+      md5: 2b8217ef2d4c620d6fe3deac3d085eab
+
+build: |
+    python3 configure.py --bootstrap --verbose
+
+install: |
+    install -vm755 ninja /usr/bin/
+
+final: |
+    install -vDm644 misc/bash-completion /usr/share/bash-completion/completions/ninja &&
+    install -vDm644 misc/zsh-completion /usr/share/zsh/site-functions/_ninja

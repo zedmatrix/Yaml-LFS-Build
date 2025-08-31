@@ -1,0 +1,28 @@
+package:
+    name: python
+    version: 3.13.7
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tar.xz
+      md5: 256cdb3bbf45cdce7499e52ba6c36ea3
+    - url: https://www.python.org/ftp/python/doc/3.13.7/python-3.13.7-docs-html.tar.bz2
+      md5: b84c0d81b2758398bb7f5b7411d3d908
+
+prepare: |
+    printf '[global]\nroot-user-action = ignore\ndisable-pip-version-check = true\n' > /etc/pip.conf
+
+build: |
+    ./configure --prefix=/usr --enable-shared --with-system-expat \
+    --enable-optimizations --without-static-libpython &&
+    make
+
+install: |
+    make install &&
+    install -v -dm755 /usr/share/doc/python-3.13.7/html
+
+
+final: |
+    tar -xvf $YSRC/python-3.13.7-docs-html.tar.bz2 \
+    --strip-components=1 --no-same-owner --no-same-permissions -C /usr/share/doc/python-3.13.7/html

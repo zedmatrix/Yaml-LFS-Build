@@ -1,0 +1,17 @@
+package:
+    name: libunistring
+    version: 1.3
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/libunistring/libunistring-1.3.tar.xz
+      md5: 57dfd9e4eba93913a564aa14eab8052e
+
+
+build: |
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/libunistring-1.3 &&
+    make
+
+install: |
+    make install

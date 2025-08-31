@@ -1,0 +1,15 @@
+package:
+    name: psmisc
+    version: 23.7
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://sourceforge.net/projects/psmisc/files/psmisc/psmisc-23.7.tar.xz
+      md5: 53eae841735189a896d614cba440eb10
+
+build: |
+    ./configure --prefix=/usr && make
+
+install: |
+    make install

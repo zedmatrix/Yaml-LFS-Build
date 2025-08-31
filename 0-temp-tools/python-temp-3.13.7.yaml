@@ -1,0 +1,16 @@
+package:
+    name: python-temp
+    version: 3.13.7
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tar.xz
+      md5: 256cdb3bbf45cdce7499e52ba6c36ea3
+
+build: |
+    ./configure --prefix=/usr --enable-shared --without-ensurepip --without-static-libpython &&
+    make
+
+install: |
+    make install

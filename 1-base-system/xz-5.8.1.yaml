@@ -1,0 +1,15 @@
+package:
+    name: xz
+    version: 5.8.1
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com//tukaani-project/xz/releases/download/v5.8.1/xz-5.8.1.tar.xz
+      md5: cf5e1feb023d22c6bdaa30e84ef3abe3
+
+build: |
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/xz-5.8.1 && make
+
+install: |
+    make install

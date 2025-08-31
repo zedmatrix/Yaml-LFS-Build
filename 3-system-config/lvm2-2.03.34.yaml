@@ -1,0 +1,19 @@
+package:
+    name: lvm2
+    version: 2.03.34
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://sourceware.org/ftp/lvm2/LVM2.2.03.34.tgz
+      md5: 947741079e22a35d76aefa99861b406a
+
+build: |
+    PATH+=:/usr/sbin ./configure --prefix=/usr --enable-cmdlib \
+    --enable-pkgconfig --enable-udev_sync &&
+    make
+
+install: |
+    make install &&
+    make install_systemd_units &&
+    sed -e '/locking_dir =/{s/#//;s/var/run/}' -i /etc/lvm/lvm.conf

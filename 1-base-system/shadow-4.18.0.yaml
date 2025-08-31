@@ -1,0 +1,32 @@
+package:
+    name: shadow
+    version: 4.18.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/shadow-maint/shadow/releases/download/4.18.0/shadow-4.18.0.tar.xz
+      md5: 30ef46f54363db1d624587be68794ef2
+
+prepare: |
+    sed -i 's/groups$(EXEEXT) //' src/Makefile.in &&
+    find man -name Makefile.in -exec sed -i 's/groups\.1 / /' {} \; &&
+    find man -name Makefile.in -exec sed -i 's/getspnam\.3 / /' {} \; &&
+    find man -name Makefile.in -exec sed -i 's/passwd\.5 / /' {} \; &&
+    sed -e 's:#ENCRYPT_METHOD DES:ENCRYPT_METHOD YESCRYPT:' \
+    -e 's:/var/spool/mail:/var/mail:' -e '/PATH=/{s@/sbin:@@;s@/bin:@@}' -i etc/login.defs &&
+    touch /usr/bin/passwd
+
+build: |
+    ./configure --sysconfdir=/etc --disable-static --with-{b,yes}crypt \
+    --without-libbsd --with-group-name-max-length=32 &&
+    make
+
+install: |
+    make exec_prefix=/usr install &&
+    make -C man install-man &&
+    pwconv && grpconv &&
+    mkdir -p /etc/default &&
+    useradd -D --gid 999 &&
+    sed -i '/MAIL/s/yes/no/' /etc/default/useradd &&
+    echo "lfsroot" | passwd --stdin root

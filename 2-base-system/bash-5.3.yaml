@@ -1,0 +1,17 @@
+package:
+    name: bash
+    version: 5.3
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/bash/bash-5.3.tar.gz
+      md5: 977c8c0c5ae6309191e7768e28ebc951
+
+build: |
+    ./configure --prefix=/usr --without-bash-malloc \
+    --with-installed-readline --docdir=/usr/share/doc/bash-5.3 &&
+    make
+
+install: |
+    make install

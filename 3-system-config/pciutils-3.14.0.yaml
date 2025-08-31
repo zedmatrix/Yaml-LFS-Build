@@ -1,0 +1,19 @@
+package:
+    name: pciutils
+    version: 3.14.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://mj.ucw.cz/download/linux/pci/pciutils-3.14.0.tar.gz
+      md5: f70cf2da9377cb484802e291ea60115d
+
+prepare: |
+    sed -r '/INSTALL/{/PCI_IDS|update-pciids /d; s/update-pciids.8//}' -i Makefile
+
+build: |
+    make PREFIX=/usr SHAREDIR=/usr/share/hwdata SHARED=yes
+
+install: |
+    make PREFIX=/usr SHAREDIR=/usr/share/hwdata SHARED=yes install install-lib &&
+    chmod -v 755 /usr/lib/libpci.so

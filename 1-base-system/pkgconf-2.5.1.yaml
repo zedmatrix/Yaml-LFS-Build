@@ -1,0 +1,17 @@
+package:
+    name: pkgconf
+    version: 2.5.1
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://distfiles.ariadne.space/pkgconf/pkgconf-2.5.1.tar.xz
+      md5: 3291128c917fdb8fccd8c9e7784b643b
+
+build: |
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/pkgconf-2.5.1 && make
+
+install: |
+    make install &&
+    ln -sv pkgconf /usr/bin/pkg-config &&
+    ln -sv pkgconf.1 /usr/share/man/man1/pkg-config.1

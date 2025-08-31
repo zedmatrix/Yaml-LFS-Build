@@ -1,0 +1,23 @@
+package:
+    name: p11-kit
+    version: 0.25.5
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/p11-glue/p11-kit/releases/download/0.25.5/p11-kit-0.25.5.tar.xz
+      md5: e9c5675508fcd8be54aa4c8cb8e794fc
+
+patches:
+    - url: /ybuild/sources/lfs-trust.patch
+      md5: 5afe88fbc7951ac3f13619147479711d
+
+prepare: |
+    meson setup ybuild --prefix=/usr --buildtype=release -D trust_paths=/etc/pki/anchors
+
+build: |
+    ninja -C ybuild
+
+install: |
+    ninja -C ybuild install &&
+    ln -sfv /usr/libexec/p11-kit/trust-extract-compat /usr/bin/update-ca-certificates

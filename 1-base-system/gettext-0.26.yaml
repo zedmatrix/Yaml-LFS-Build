@@ -1,0 +1,17 @@
+package:
+    name: gettext
+    version: 0.26
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gettext/gettext-0.26.tar.xz
+      md5: 8e14e926f088e292f5f2bce95b81d10e
+
+build: |
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/gettext-0.26 &&
+    make
+
+install: |
+    make install &&
+    chmod -v 0755 /usr/lib/preloadable_libintl.so

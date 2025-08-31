@@ -1,0 +1,20 @@
+package:
+    name: intltool
+    version: 0.51.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://launchpad.net/intltool/trunk/0.51.0/+download/intltool-0.51.0.tar.gz
+      md5: 12e517cac2b57a0121cda351570f1e63
+
+prepare: |
+    sed -i 's:\\\${:\\\$\\{:' intltool-update.in
+
+build: |
+    ./configure --prefix=/usr &&
+    make
+
+install: |
+    make install &&
+    install -v -Dm644 doc/I18N-HOWTO /usr/share/doc/intltool-0.51.0/I18N-HOWTO

@@ -1,0 +1,19 @@
+package:
+    name: sed
+    version: 4.9
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/sed/sed-4.9.tar.xz
+      md5: 6aac9b2dbafcd5b7a67a8a9bcb8036c3
+
+build: |
+    ./configure --prefix=/usr &&
+    make &&
+    make html
+
+install: |
+    make install &&
+    install -d -m755 /usr/share/doc/sed-4.9 &&
+    install -m644 doc/sed.html /usr/share/doc/sed-4.9

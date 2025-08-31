@@ -1,0 +1,18 @@
+package:
+    name: libelf
+    version: 0.193
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://sourceware.org/ftp/elfutils/0.193/elfutils-0.193.tar.bz2
+      md5: ceefa052ded950a4c523688799193a44
+
+build: |
+    ./configure --prefix=/usr --disable-debuginfod --enable-libdebuginfod=dummy &&
+    make
+
+install: |
+    make -C libelf install &&
+    install -vm644 config/libelf.pc /usr/lib/pkgconfig &&
+    rm -v /usr/lib/libelf.a

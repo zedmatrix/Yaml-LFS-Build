@@ -1,0 +1,16 @@
+package:
+    name: libtasn1
+    version: 4.20.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.20.0.tar.gz
+      md5: 930f71d788cf37505a0327c1b84741be
+
+build: |
+    ./configure --prefix=/usr --disable-static &&
+    make
+
+install: |
+    make install

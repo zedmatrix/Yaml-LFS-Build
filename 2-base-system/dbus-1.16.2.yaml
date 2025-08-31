@@ -1,0 +1,19 @@
+package:
+    name: dbus
+    version: 1.16.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://dbus.freedesktop.org/releases/dbus/dbus-1.16.2.tar.xz
+      md5: 97832e6f0a260936d28536e5349c22e5
+
+prepare: |
+    meson setup zbuild --prefix=/usr --buildtype=release --wrap-mode=nofallback
+
+build: |
+    ninja -C zbuild
+
+install: |
+    ninja -C zbuild install &&
+    ln -sfv /etc/machine-id /var/lib/dbus

@@ -1,0 +1,27 @@
+package:
+    name: kbd
+    version: 2.8.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.kernel.org/pub/linux/utils/kbd/kbd-2.8.0.tar.xz
+      md5: 24b5d24f7483726b88f214dc6c77aa41
+
+patches:
+    - url: https://www.linuxfromscratch.org/patches/lfs/development/kbd-2.8.0-backspace-1.patch
+      md5: f75cca16a38da6caa7d52151f7136895
+
+prepare: |
+    sed -i '/RESIZECONS_PROGS=/s/yes/no/' configure &&
+    sed -i 's/resizecons.8 //' docs/man/man8/Makefile.in
+
+build: |
+    ./configure --prefix=/usr --disable-vlock &&
+    make
+
+install: |
+    make install
+
+final: |
+    cp -R -v docs/doc -T /usr/share/doc/kbd-2.8.0
