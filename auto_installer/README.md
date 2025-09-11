@@ -26,13 +26,14 @@ m4-temp ncurses-temp bash-temp coreutils-temp diffutils-temp
 file-temp findutils-temp gawk-temp grep-temp gzip-temp make-temp
 patch-temp sed-temp tar-temp xz-temp binutils-temp2 gcc-temp2
 ```
-remove the temporary build files: `rm -rf /mnt/lfs/ybuild/tmp/*`
-Chroot Auto Script: `Yaml-lfs-chroot`
+<br>Remove the temporary build files: `rm -rf /mnt/lfs/ybuild/tmp/*`
+<br>Chroot Auto Script: `Yaml-lfs-chroot`
 
 ## Chapter 7 - Extra Temp Tools
-Create Final Layout: `7-5-Creating-Directories-Both`<br>
-Create System Files: `7-6-Create-Files_sysv-and-systemd`<br>
-Auto Script: `7-7-Chapter-Install`<br>
+<br>Create Final Layout: `7-5-Creating-Directories-Both`
+<br>Create System Files: `7-6-Create-Files_sysv-and-systemd`
+<br>Auto Script: `7-7-Chapter-Install`
+<br>
 ```
 gettext-temp bison-temp perl-temp python-temp texinfo-temp util-linux-temp nano-temp
 7-z-cleanup.sh
