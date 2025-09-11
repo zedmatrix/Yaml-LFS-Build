@@ -1,0 +1,17 @@
+package:
+    name: dosfstools
+    version: 4.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/dosfstools/dosfstools/releases/download/v4.2/dosfstools-4.2.tar.gz
+      md5: 49c8e457327dc61efab5b115a27b087a
+
+build: |
+    ./configure --prefix=/usr --enable-compat-symlinks --mandir=/usr/share/man \
+    --docdir=/usr/share/doc/dosfstools-4.2 &&
+    make
+
+install: |
+    make install

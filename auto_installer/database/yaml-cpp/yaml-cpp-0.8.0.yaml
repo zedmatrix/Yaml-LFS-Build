@@ -1,0 +1,24 @@
+package:
+    name: yaml-cpp
+    version: 0.8.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/jbeder/yaml-cpp/archive/0.8.0/yaml-cpp-0.8.0.tar.gz
+      md5: 1d2c7975edba60e995abe3c4af6480e5
+
+patches:
+    - url: /ybuild/sources/yaml-cpp-0.8.0-include-cstdint.patch
+      md5: 654ab8a5687a8002c7d347da2081f834
+
+prepare: |
+    cmake -B ybuild -G Ninja -D CMAKE_INSTALL_PREFIX=/usr -D CMAKE_BUILD_TYPE=Release \
+    -D BUILD_SHARED_LIBS=ON -D YAML_BUILD_SHARED_LIBS=ON -D CMAKE_POLICY_VERSION_MINIMUM=3.5 \
+    -D YAML_CPP_BUILD_TOOLS=OFF -D YAML_CPP_BUILD_TESTS=OFF
+
+build: |
+    ninja -C ybuild
+
+install: |
+    ninja -C ybuild install

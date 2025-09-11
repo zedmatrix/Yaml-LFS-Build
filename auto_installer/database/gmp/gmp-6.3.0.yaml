@@ -1,0 +1,21 @@
+package:
+    name: gmp
+    version: 6.3.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz
+      md5: 956dc04e864001a9c22429f761f2c283
+
+prepare: |
+    sed -i '/long long t1;/,+1s/()/(...)/' configure &&
+    ./configure --prefix=/usr --enable-cxx --disable-static --docdir=/usr/share/doc/gmp-6.3.0
+
+build: |
+    make && make html &&
+    make check 2>&1 | tee gmp-check-log
+
+install: |
+    make install && make install-html &&
+    awk '/# PASS:/{total+=$3} ; END{print total}' gmp-check-log

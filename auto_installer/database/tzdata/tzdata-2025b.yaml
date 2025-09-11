@@ -1,0 +1,21 @@
+package:
+    name: tzdata
+    version: 2025b
+    rel: 0
+    archive: false
+
+sources:
+    - url: https://www.iana.org/time-zones/repository/releases/tzdata2025b.tar.gz
+      md5: ad65154c48c74a9b311fe84778c5434f
+
+build: |
+    mkdir -pv /usr/share/zoneinfo/{posix,right} &&
+    for tz in etcetera southamerica northamerica europe africa antarctica  \
+          asia australasia backward; do
+    zic -L /dev/null   -d /usr/share/zoneinfo ${tz} &&
+    zic -L /dev/null   -d /usr/share/zoneinfo/posix ${tz} &&
+    zic -L leapseconds -d /usr/share/zoneinfo/right ${tz}
+    done &&
+    cp -v zone.tab zone1970.tab iso3166.tab /usr/share/zoneinfo &&
+    zic -d /usr/share/zoneinfo -p America/New_York
+    ln -sfv /usr/share/zoneinfo/Canada/Pacific /etc/localtime

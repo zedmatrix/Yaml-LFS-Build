@@ -45,8 +45,7 @@ bool change_dir(const std::filesystem::path& dir) {
     }
 }
 
-void createBuildDir(const std::filesystem::path& path) {
-    m_build_dir = (path / "tmp" / m_pkgdir);
+void createBuildDir() {
     if (!make_dir(m_build_dir)) {
         const std::uintmax_t n{fs::remove_all(m_build_dir)};
         printf("remove_all(): %ju files or directories\n", static_cast<uintmax_t>(n));

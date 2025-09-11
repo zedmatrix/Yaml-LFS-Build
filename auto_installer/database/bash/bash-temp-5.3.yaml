@@ -1,0 +1,17 @@
+package:
+    name: bash-temp
+    version: 5.3
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/bash/bash-5.3.tar.gz
+      md5: 977c8c0c5ae6309191e7768e28ebc951
+
+build: |
+    ./configure --prefix=/usr --build=$(sh support/config.guess) --host=$LFS_TGT --without-bash-malloc &&
+    make
+
+install: |
+    make DESTDIR=$LFS install &&
+    ln -sv bash $LFS/bin/sh

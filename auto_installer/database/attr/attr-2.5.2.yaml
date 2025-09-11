@@ -1,0 +1,17 @@
+package:
+    name: attr
+    version: 2.5.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://download.savannah.gnu.org/releases/attr/attr-2.5.2.tar.gz
+      md5: 227043ec2f6ca03c0948df5517f9c927
+
+build: |
+    ./configure --prefix=/usr --disable-static \
+    --sysconfdir=/etc --docdir=/usr/share/doc/attr-2.5.2 &&
+    make
+
+install: |
+    make install

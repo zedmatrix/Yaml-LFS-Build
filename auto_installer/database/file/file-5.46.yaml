@@ -1,0 +1,15 @@
+package:
+    name: file
+    version: 5.46
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://astron.com/pub/file/file-5.46.tar.gz
+      md5: 459da2d4b534801e2e2861611d823864
+
+build: |
+    ./configure --prefix=/usr && make
+
+install: |
+    make install

@@ -1,0 +1,21 @@
+package:
+    name: man-db
+    version: 2.13.1
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://download.savannah.gnu.org/releases/man-db/man-db-2.13.1.tar.xz
+      md5: b6335533cbeac3b24cd7be31fdee8c83
+
+prepare: |
+    ./configure --prefix=/usr --docdir=/usr/share/doc/man-db-2.13.1 --sysconfdir=/etc \
+    --disable-setuid --enable-cache-owner=bin --with-browser=/usr/bin/lynx \
+    --with-vgrind=/usr/bin/vgrind --with-grap=/usr/bin/grap \
+    --with-systemdtmpfilesdir= --with-systemdsystemunitdir=
+
+build: |
+    make
+
+install: |
+    make install

@@ -1,0 +1,16 @@
+package:
+    name: libarchive
+    version: 3.8.1
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/libarchive/libarchive/releases/download/v3.8.1/libarchive-3.8.1.tar.xz
+      md5: 80fd1a7acc4da7c7d4a5f9f96df6e3ff
+
+build: |
+    ./configure --prefix=/usr --without-xml2 --without-openssl &&
+    make
+
+install: |
+    make install

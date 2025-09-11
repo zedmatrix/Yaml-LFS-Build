@@ -1,0 +1,25 @@
+package:
+    name: libpng
+    version: 1.6.50
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://downloads.sourceforge.net/libpng/libpng-1.6.50.tar.xz
+      md5: e583e61455c4f40d565d85c0e9a2fbf9
+    - url: https://downloads.sourceforge.net/sourceforge/libpng-apng/libpng-1.6.47-apng.patch.gz
+      md5: 5c4a639b227ac60a0e438840bcf1cf5f
+
+prepare: |
+    gzip -cd $YSRC/libpng-1.6.47-apng.patch.gz | patch -p1
+
+build: |
+    ./configure --prefix=/usr --disable-static &&
+    make
+
+install: |
+    make install
+
+final: |
+    mkdir -v /usr/share/doc/libpng-1.6.50 &&
+    cp -v README libpng-manual.txt /usr/share/doc/libpng-1.6.50

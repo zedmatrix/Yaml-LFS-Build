@@ -1,14 +1,9 @@
-#include <iostream>
-#include <string>
-#include <filesystem>
+#include "init.hpp"
 #include "yaml-in.hpp"
 #include "fs-functions.hpp"
 #include "exec.hpp"
 #include "download.hpp"
 #include "source-functions.hpp"
-
-namespace fs = std::filesystem;
-fs::path command;
 
 bool extract() {
     m_archivedir = m_ysrc / fs::path(m_archive);
@@ -72,7 +67,6 @@ int main(int argc, char* argv[]/*, char* envp[]*/) {
     fs::path filepath = argv[1];
     if (!std::filesystem::exists(filepath)) return 1;
 
-    fs::path certFile = "/ybuild/ca-bundle.crt";
     if (fs::exists(certFile)) {
         m_addCert = certFile.string();
     }
@@ -80,19 +74,22 @@ int main(int argc, char* argv[]/*, char* envp[]*/) {
     // Get Package Data
     loadPackage(filepath);
 
-    m_sourcePath = absolutePath(filepath);
-    fs::current_path(m_sourcePath);
-    m_execPath = fs::read_symlink("/proc/self/exe");
-    m_rootPath = m_execPath.parent_path();
-    createBuildDir(m_rootPath);
+    m_package_path = absolutePath(filepath);
 
-    m_ysrc = m_rootPath / m_source_dir;
-    std::cout << "*** Main root: " << m_rootPath << std::endl;
+    fs::current_path(m_package_path);
+
+    m_build_dir = (m_root_path / "tmp" / m_pkgdir);
+    createBuildDir();
+
+    m_ysrc = (m_package_path / m_source_dir);
+
+    std::cout << "*** Main root: " << m_root_path << std::endl;
     std::cout << "*** Main ysrc: " << m_ysrc << std::endl;
     std::cout << "*** Main Build: " << m_build_dir << std::endl;
     make_dir(m_ysrc);
 
     std::println("{}", stars());
+    m_DEBUG = true;
     if (!getSources()) {
         printf("Error Downloading Sources\n");
         return 1;
@@ -134,6 +131,7 @@ int main(int argc, char* argv[]/*, char* envp[]*/) {
     std::println("{}", stars());
     change_dir(m_rootPath);
 
+    m_DEBUG = false;
     command = "env";
     execute(command);
 

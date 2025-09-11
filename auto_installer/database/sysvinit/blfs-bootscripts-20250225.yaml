@@ -1,0 +1,13 @@
+package:
+    name: blfs-bootscripts
+    version: 20250225
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://anduin.linuxfromscratch.org/BLFS/blfs-bootscripts/blfs-bootscripts-20250225.tar.xz
+      md5: ec1bae931da7e994d2fbb752913215a0
+
+install: |
+    make install-sshd
+    make install-service-dhcpcd

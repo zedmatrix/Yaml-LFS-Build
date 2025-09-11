@@ -1,0 +1,26 @@
+package:
+    name: gcc-temp2
+    version: 15.2.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz
+      md5: b861b092bf1af683c46a8aa2e689a6fd
+
+prepare: |
+    $YSRC/gcc-temptools.sh &&
+    sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64 &&
+    sed '/thread_header =/s/@.*@/gthr-posix.h/' -i libgcc/Makefile.in libstdc++-v3/include/Makefile.in
+
+build: |
+    mkdir -v build && cd build && ../configure --build=$(../config.guess) --host=$LFS_TGT \
+    --target=$LFS_TGT --prefix=/usr --with-build-sysroot=$LFS --enable-default-pie --enable-default-ssp \
+    --disable-nls --disable-multilib --disable-libatomic --disable-libgomp --disable-libquadmath \
+    --disable-libsanitizer --disable-libssp --disable-libvtv --enable-languages=c,c++ \
+    LDFLAGS_FOR_TARGET=-L$PWD/$LFS_TGT/libgcc &&
+    make
+
+install: |
+    cd build && make DESTDIR=$LFS install &&
+    ln -sv gcc $LFS/usr/bin/cc

@@ -14,14 +14,13 @@ bool getSources() {
 
         if (!fs::exists(filepath)) {
             std::println("Downloading: {}", file);
-            std::string md5sum = download(url, filepath);
-            if (md5sum.empty() || md5sum != md5) {
-                std::println("Failed To Download: {} \nChecksum Error:{} != {}", file, md5, md5sum);
+            if (download(url, filepath) != 0) {
+                std::println("Failed To Download: {}", file);
                 success = false;
                 break;
-            }
+            };
         }
-        //TODO check md5 sum of already downloaded file
+        //TODO check sha256sum check of file
     }
 
     if (!m_config["patches"]) {
@@ -35,14 +34,13 @@ bool getSources() {
 
         if (!fs::exists(filepath)) {
             std::println("Downloading: {}", file);
-            std::string md5sum = download(url, filepath);
-            if (md5sum.empty() || md5sum != md5) {
-                std::println("Failed To Download: {} \nChecksum Error:{} != {}", file, md5, md5sum);
+            if (download(url, filepath) != 0) {
+                std::println("Failed To Download: {}", file);
                 success = false;
                 break;
-            }
+            };
         }
-        //TODO check md5 sum of already downloaded file
+        //TODO check sha256sum check of file
     }
     return success;
 }

@@ -1,0 +1,15 @@
+package:
+    name: udev-lfs
+    version: 20230818
+    rel: 0
+    archive: false
+
+sources:
+    - url: https://anduin.linuxfromscratch.org/LFS/udev-lfs-20230818.tar.xz
+      md5: acd4360d8a5c3ef320b9db88d275dae6
+
+install: |
+    make -f udev-lfs-20230818/Makefile.lfs install
+
+final: |
+    udev-hwdb update

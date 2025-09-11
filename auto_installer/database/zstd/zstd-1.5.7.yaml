@@ -1,0 +1,16 @@
+package:
+    name: zstd
+    version: 1.5.7
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz
+      md5: 780fc1896922b1bc52a4e90980cdda48
+
+build: |
+    make prefix=/usr
+
+install: |
+    make prefix=/usr install &&
+    rm -v /usr/lib/libzstd.a

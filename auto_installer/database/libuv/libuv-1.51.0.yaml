@@ -1,0 +1,19 @@
+package:
+    name: libuv
+    version: 1.51.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://dist.libuv.org/dist/v1.51.0/libuv-v1.51.0.tar.gz
+      md5: 5e0109e19c3fed3a8cbecb958de39afa
+
+prepare: |
+    sh autogen.sh
+
+build: |
+    ./configure --prefix=/usr --disable-static &&
+    make
+
+install: |
+    make install

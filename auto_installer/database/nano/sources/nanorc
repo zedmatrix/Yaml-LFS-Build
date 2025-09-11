@@ -1,0 +1,15 @@
+set autoindent
+# set boldtext
+set constantshow
+set fill 72
+set historylog
+set indicator
+set multibuffer
+set positionlog
+set quickblank
+set regexp
+# set softwrap
+set tabsize 4
+
+include /usr/share/nano/sh.nanorc
+include /usr/share/nano/yaml.nanorc

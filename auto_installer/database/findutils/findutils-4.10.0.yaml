@@ -1,0 +1,16 @@
+package:
+    name: findutils
+    version: 4.10.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/findutils/findutils-4.10.0.tar.xz
+      md5: 870cfd71c07d37ebe56f9f4aaf4ad872
+
+build: |
+    ./configure --prefix=/usr --localstatedir=/var/lib/locate &&
+    make
+
+install: |
+    make install

@@ -1,0 +1,28 @@
+package:
+    name: ncurses-20250809
+    version: 6.5
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://invisible-mirror.net/archives/ncurses/current/ncurses-6.5-20250809.tgz
+      md5: 679987405412f970561cc85e1e6428a2
+
+prepare: |
+    ./configure --prefix=/usr --mandir=/usr/share/man --with-shared --without-debug \
+    --without-normal --with-cxx-shared --enable-pc-files --with-pkg-config-libdir=/usr/lib/pkgconfig
+
+build: |
+    make
+
+install: |
+    make DESTDIR=$PWD/dest install &&
+    install -vm755 dest/usr/lib/libncursesw.so.6.5 /usr/lib &&
+    rm -v dest/usr/lib/libncursesw.so.6.5 &&
+    sed -e 's/^#if.*XOPEN.*$/#if 1/' -i dest/usr/include/curses.h &&
+    cp -av dest/* / &&
+    ln -sfv libncursesw.so /usr/lib/libcurses.so && cp -v -R doc -T /usr/share/doc/ncurses-6.5-20250809 &&
+    for lib in ncurses form panel menu ; do
+    ln -sfv lib${lib}w.so /usr/lib/lib${lib}.so
+    ln -sfv ${lib}w.pc /usr/lib/pkgconfig/${lib}.pc
+    done

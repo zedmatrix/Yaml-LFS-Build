@@ -1,33 +1,3 @@
-#include <print>
-#include <string>
-#include <filesystem>
-#include <yaml-cpp/yaml.h>
-
-std::string m_pkgdir, m_pkgname, m_pkgver, m_archive;
-std::string m_prepare, m_build, m_check, m_install, m_final;
-std::string m_pkgurl, m_pkgmd5, m_addCert;
-
-std::filesystem::path m_build_dir, m_sourcePath, m_archivedir, m_ysrc;
-std::filesystem::path m_lfs {"/mnt/lfs"};
-std::filesystem::path m_source_dir {"sources"};
-
-int m_pkgrel;
-bool m_zarchive;
-
-YAML::Node m_config, m_package;
-
-std::string stars() {
-    return std::string(30, '*');
-}
-
-std::string getBaseName(const std::string& str) {
-    auto last_slash = str.find_last_of('/');
-    if (last_slash != std::string::npos) {
-        return str.substr(last_slash + 1);
-    }
-    return "";
-}
-
 std::string checkNode(const YAML::Node& config, const std::string& node) {
     if (!config[node]) {
         return {};

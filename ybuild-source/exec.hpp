@@ -6,16 +6,17 @@
 bool execute(const std::filesystem::path& command) {
     std::vector<std::string> env_strings;
     env_strings.push_back("YSRC=" + m_ysrc.string());
-    env_strings.push_back("PKGDIR="  + m_pkgdir);
+    env_strings.push_back("ybuild_root_path=" + m_root_path.string());
+    env_strings.push_back("package_path=" + m_package_path.string());
+    env_strings.push_back("PKGDIR=" + m_pkgdir);
     env_strings.push_back("PKGNAME=" + m_pkgname);
-    env_strings.push_back("PKGVER="  + m_pkgver);
-    env_strings.push_back("PKGURL=" + m_pkgurl);
-    env_strings.push_back("PKGMD5="  + m_pkgmd5);
+    env_strings.push_back("PKGVER=" + m_pkgver);
+    env_strings.push_back("CFLAGS=" + m_cflags);
+    env_strings.push_back("CXXFLAGS=" + m_cflags);
     env_strings.push_back("LC_ALL=POSIX");
 
-    bool lfs = static_cast<std::string>(m_rootPath).starts_with("/mnt/lfs");
     if (lfs) {
-        env_strings.push_back("LFS=/mnt/lfs");
+        env_strings.push_back("LFS=" + m_lfs.string());
         env_strings.push_back("LFS_TGT=x86_64-ybuild-linux-gnu");
         env_strings.push_back("CONFIG_SITE=" + (m_lfs / "usr/share/config.site").string());
         env_strings.push_back("PATH=" + (m_lfs / "tools/bin:/usr/bin:/bin:/sbin").string());
@@ -26,11 +27,20 @@ bool execute(const std::filesystem::path& command) {
     }
 
     std::vector<char*> envp;
+
     for (auto& s : env_strings) {
         envp.push_back(const_cast<char*>(s.c_str()));
-        printf("*** Setting ENV: %s \n",s.c_str());
     }
+
+    // terminate with nullptr
     envp.push_back(nullptr);
+
+    // Test printout (optional)
+    if (m_DEBUG) {
+        for (auto& s : env_strings) {
+            printf("*** Setting ENV: %s \n", s.c_str());
+        }
+    }
 
     char* const args[] = {
         (char*)"/usr/bin/bash",

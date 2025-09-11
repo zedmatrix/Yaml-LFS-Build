@@ -1,31 +1,28 @@
 CC := gcc
 CXX := g++
-CXXFLAGS := -std=c++23 -Wall -Wextra -O2 -march=x86-64
-LDFLAGS := -lssl -lcrypto -lcurl -lyaml-cpp
+CXXFLAGS := -std=c++23 -Wall -Wextra -O2
+LDFLAGS := -lcurl -lyaml-cpp #-lssl -lcrypto
 
 SOURCE := main.cpp
-EXEC := parse-yaml
 
-TEST1 := test.cpp
-OUT1 := fs-test
+STATIC_EXEC := Ybuild
+SHARED_EXEC := yaml-build
+STATIC := -static
 
 ${SOURCE}.o: ${SOURCE}
 	${CXX} ${CXXFLAGS} -c ${SOURCE} -o ${SOURCE}.o
 
-${EXEC}: ${SOURCE}.o
-	${CXX} ${CXXFLAGS} ${LDFLAGS} ${SOURCE}.o -o ${EXEC}
+${STATIC_EXEC}: ${SOURCE}.o
+	${CXX} ${CXXFLAGS} ${LDFLAGS} ${SOURCE}.o ${STATIC} -o ${STATIC_EXEC}
 
-yaml: ${EXEC}
+${SHARED_EXEC}: ${SOURCE}.o
+	${CXX} ${CXXFLAGS} ${LDFLAGS} ${SOURCE}.o -o ${SHARED_EXEC}
 
-${TEST1}.o: ${TEST1}
-	${CXX} ${CXXFLAGS} -c ${TEST1} -o ${TEST1}.o
+yaml: ${SHARED_EXEC}
 
-${OUT1}: ${TEST1}.o
-	${CXX} ${CXXFLAGS} ${TEST1}.o -o ${OUT1}
-
-test: ${OUT1}
+ybuild: ${STATIC_EXEC}
 
 clean:
-	rm -f ${SOURCE}.o ${EXEC} ${TEST1}.o ${OUT1}
+	rm -f ${SOURCE}.o ${STATIC_EXEC} ${SHARED_EXEC}
 
-.PHONY: clean yaml test
+.PHONY: clean yaml ybuild

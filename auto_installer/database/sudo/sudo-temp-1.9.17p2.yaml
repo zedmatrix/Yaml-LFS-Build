@@ -1,0 +1,24 @@
+package:
+    name: sudo
+    version: 1.9.17p2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.sudo.ws/dist/sudo-1.9.17p2.tar.gz
+      md5: dcbf46f739ae06b076e1a11cbb271a10
+
+build: |
+    ./configure --prefix=/usr --libexecdir=/usr/lib --with-secure-path \
+    --with-env-editor --docdir=/usr/share/doc/sudo-1.9.17p2 \
+    --without-pam --with-passprompt="[sudo] password for %p: " &&
+    make
+
+install: |
+    make install &&
+
+final: |
+    cat > /etc/sudoers.d/00-sudo << "EOF"
+    Defaults secure_path="/usr/sbin:/usr/bin"
+    %wheel ALL=(ALL) ALL
+    EOF

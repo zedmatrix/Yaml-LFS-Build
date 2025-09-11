@@ -1,0 +1,18 @@
+package:
+    name: libpsl
+    version: 0.21.5
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/rockdaboot/libpsl/releases/download/0.21.5/libpsl-0.21.5.tar.gz
+      md5: 870a798ee9860b6e77896548428dba7b
+
+prepare: |
+    ./configure --prefix=/usr
+
+build: |
+    make
+
+install: |
+    make install

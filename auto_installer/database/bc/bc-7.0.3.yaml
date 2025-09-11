@@ -1,0 +1,15 @@
+package:
+    name: bc
+    version: 7.0.3
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/gavinhoward/bc/releases/download/7.0.3/bc-7.0.3.tar.xz
+      md5: ad4db5a0eb4fdbb3f6813be4b6b3da74
+
+build: |
+    CC='gcc -std=c99' ./configure --prefix=/usr -G -O3 -r && make
+
+install: |
+    make install

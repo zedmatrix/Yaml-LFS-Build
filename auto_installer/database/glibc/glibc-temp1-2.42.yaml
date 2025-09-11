@@ -1,0 +1,31 @@
+package:
+    name: glibc-temp1
+    version: 2.42
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/glibc/glibc-2.42.tar.xz
+      md5: 23c6f5a27932b435cae94e087cb8b1f5
+
+patches:
+    - url: https://www.linuxfromscratch.org/patches/lfs/development/glibc-2.42-fhs-1.patch
+      md5: 9a5997c3452909b1769918c759eff8a2
+
+prepare: |
+    ln -sfv ../lib/ld-linux-x86-64.so.2 $LFS/lib64 &&
+    ln -sfv ../lib/ld-linux-x86-64.so.2 $LFS/lib64/ld-lsb-x86-64.so.3 &&
+    mkdir -v build && cd build && echo "rootsbindir=/usr/sbin" > configparms &&
+    unset CFLAGS && unset CXXFLAGS &&
+    ../configure --prefix=/usr --host=$LFS_TGT --build=$(../scripts/config.guess) \
+    --disable-nscd libc_cv_slibdir=/usr/lib --enable-kernel=5.4
+
+build: |
+    cd build && unset CFLAGS && unset CXXFLAGS && make -j1
+
+install: |
+    cd build && make DESTDIR=$LFS install &&
+    sed '/RTLDLIST=/s@/usr@@g' -i $LFS/usr/bin/ldd
+
+final: |
+    ${YSRC}/glibc-test.sh

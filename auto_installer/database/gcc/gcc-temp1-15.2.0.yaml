@@ -1,0 +1,27 @@
+package:
+    name: gcc-temp1
+    version: 15.2.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gcc/gcc-15.2.0/gcc-15.2.0.tar.xz
+      md5: b861b092bf1af683c46a8aa2e689a6fd
+
+prepare: |
+    $YSRC/gcc-temptools.sh &&
+    sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64
+
+build: |
+    mkdir -v build && cd build &&
+    ../configure --target=$LFS_TGT --prefix=$LFS/tools --with-glibc-version=2.42 \
+    --with-sysroot=$LFS --with-newlib --without-headers --enable-default-pie \
+    --enable-default-ssp --disable-nls --disable-shared --disable-multilib \
+    --disable-threads --disable-libatomic --disable-libgomp --disable-libquadmath \
+    --disable-libssp --disable-libvtv --disable-libstdcxx --enable-languages=c,c++ &&
+    make
+
+install: |
+    cd build && make install && cd .. &&
+    cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
+    `dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/include/limits.h

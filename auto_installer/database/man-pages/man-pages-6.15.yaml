@@ -1,0 +1,15 @@
+package:
+    name: man-pages
+    version: 6.15
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.kernel.org/pub/linux/docs/man-pages/man-pages-6.15.tar.xz
+      md5: 16f68d70139dd2bbcae4102be4705753
+
+build: |
+    rm -v man3/crypt*
+
+install: |
+    make -R GIT=false prefix=/usr install

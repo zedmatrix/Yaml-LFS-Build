@@ -1,0 +1,20 @@
+package:
+    name: sysklogd
+    version: 2.7.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/troglobit/sysklogd/releases/download/v2.7.2/sysklogd-2.7.2.tar.gz
+      md5: af60786956a2dc84054fbf46652e515e
+
+build: |
+    ./configure --prefix=/usr --sysconfdir=/etc --runstatedir=/run \
+        --without-logger --disable-static --docdir=/usr/share/doc/sysklogd-2.7.2 &&
+    make
+
+install: |
+    make install
+
+final: |
+    install -Dm644 ${YSRC}/syslog.conf /etc/syslog.conf

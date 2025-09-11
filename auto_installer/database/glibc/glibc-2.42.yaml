@@ -1,0 +1,36 @@
+package:
+    name: glibc
+    version: 2.42
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/glibc/glibc-2.42.tar.xz
+      md5: 23c6f5a27932b435cae94e087cb8b1f5
+
+patches:
+    - url: https://www.linuxfromscratch.org/patches/lfs/development/glibc-2.42-fhs-1.patch
+      md5: 9a5997c3452909b1769918c759eff8a2
+
+prepare: |
+    mkdir -v build && cd build && echo "rootsbindir=/usr/sbin" > configparms &&
+    unset CFLAGS && unset CXXFLAGS &&
+    ../configure --prefix=/usr --disable-werror --disable-nscd libc_cv_slibdir=/usr/lib \
+    --enable-stack-protector=strong --enable-kernel=5.4
+
+build: |
+    cd build && unset CFLAGS && unset CXXFLAGS &&
+    make && make check &&
+    grep "Timed out" $(find -name \*.out) || true
+
+install: |
+    touch /etc/ld.so.conf && cd build &&
+    sed '/test-installation/s@$(PERL)@echo not running@' -i ../Makefile &&
+    make install &&
+    sed '/RTLDLIST=/s@/usr@@g' -i /usr/bin/ldd &&
+    make localedata/install-locales
+
+final: |
+    install -Dm644 ${YSRC}/nsswitch.conf /etc/nsswitch.conf
+    install -Dm644 ${YSRC}/ld.so.conf /etc/ld.so.conf
+    mkdir -pv /etc/ld.so.conf.d

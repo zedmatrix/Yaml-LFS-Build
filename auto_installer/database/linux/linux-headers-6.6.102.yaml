@@ -1,0 +1,19 @@
+package:
+    name: linux
+    version: 6.6.102
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.6.102.tar.xz
+      md5: 9ca24e82d76594dab8120af02fed98d7
+
+prepare:
+    make mrproper
+
+build:
+    make headers
+
+install:
+    find usr/include -type f ! -name '*.h' -delete &&
+    cp -rv usr/include $LFS/usr

@@ -1,0 +1,3 @@
+auto_installer/database/*.tar.*
+auto_installer/database/*.tgz
+auto_installer/database/*.zip

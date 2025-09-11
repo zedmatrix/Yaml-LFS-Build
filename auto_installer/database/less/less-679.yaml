@@ -1,0 +1,16 @@
+package:
+    name: less
+    version: 679
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.greenwoodsoftware.com/less/less-679.tar.gz
+      md5: 0386dc14f6a081a94dfb4c2413864eed
+
+build: |
+    ./configure --prefix=/usr --sysconfdir=/etc &&
+    make
+
+install: |
+    make install

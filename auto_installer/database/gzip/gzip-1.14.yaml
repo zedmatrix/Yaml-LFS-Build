@@ -1,0 +1,16 @@
+package:
+    name: gzip
+    version: 1.14
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gzip/gzip-1.14.tar.xz
+      md5: 4bf5a10f287501ee8e8ebe00ef62b2c2
+
+build: |
+    ./configure --prefix=/usr &&
+    make
+
+install: |
+    make install

@@ -1,0 +1,17 @@
+package:
+    name: procps-ng
+    version: 4.0.5
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://sourceforge.net/projects/procps-ng/files/Production/procps-ng-4.0.5.tar.xz
+      md5: 90803e64f51f192f3325d25c3335d057
+
+build: |
+    ./configure --prefix=/usr --docdir=/usr/share/doc/procps-ng-4.0.5 \
+    --disable-static --disable-kill --enable-watch8bit &&
+    make
+
+install: |
+    make install

@@ -1,0 +1,16 @@
+package:
+    name: gdbm
+    version: 1.26
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/gdbm/gdbm-1.26.tar.gz
+      md5: aaa600665bc89e2febb3c7bd90679115
+
+build: |
+    ./configure --prefix=/usr --disable-static --enable-libgdbm-compat &&
+    make
+
+install: |
+    make install

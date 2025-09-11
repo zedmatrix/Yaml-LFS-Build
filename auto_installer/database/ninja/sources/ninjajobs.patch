@@ -1,0 +1,14 @@
+--- a/src/ninja.cc	2025-08-30 17:11:56.059927984 +0000
++++ b/src/ninja.cc	2025-08-30 17:12:25.957520262 +0000
+@@ -252,6 +252,11 @@
+ 
+ /// Choose a default value for the -j (parallelism) flag.
+ int GuessParallelism() {
++  int   j = 0;
++  char* jobs = getenv( "NINJAJOBS" );
++  if ( jobs != NULL ) j = atoi( jobs );
++  if ( j > 0 ) return j;
++
+   switch (int processors = GetProcessorCount()) {
+   case 0:
+   case 1:

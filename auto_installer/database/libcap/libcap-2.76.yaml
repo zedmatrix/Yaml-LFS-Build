@@ -1,0 +1,16 @@
+package:
+    name: libcap
+    version: 2.76
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-2.76.tar.xz
+      md5: 449ade7d620b5c4eeb15a632fbaa4f74
+
+build: |
+    sed -i '/install -m.*STA/d' libcap/Makefile &&
+    make prefix=/usr lib=lib
+
+install: |
+    make prefix=/usr lib=lib install

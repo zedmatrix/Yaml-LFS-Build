@@ -1,0 +1,28 @@
+package:
+    name: freetype2
+    version: 2.13.3
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://downloads.sourceforge.net/freetype/freetype-2.13.3.tar.xz
+      md5: f3b4432c4212064c00500e1ad63fbc64
+    - url: https://downloads.sourceforge.net/freetype/freetype-doc-2.13.3.tar.xz
+      md5: 6affe0d431939398cc3c7cdd58d824f8
+
+prepare: |
+    tar -xf $YSRC/freetype-doc-2.13.3.tar.xz --strip-components=2 -C docs &&
+    sed -ri "s:.*(AUX_MODULES.*valid):\1:" modules.cfg &&
+    sed -r "s:.*(#.*SUBPIXEL_RENDERING) .*:\1:" -i include/freetype/config/ftoption.h
+
+build: |
+    ./configure --prefix=/usr --without-harfbuzz \
+    --enable-freetype-config --disable-static &&
+    make
+
+install: |
+    make install
+
+final: |
+    cp -v -R docs -T /usr/share/doc/freetype-2.13.3 &&
+    rm -v /usr/share/doc/freetype-2.13.3/freetype-config.1

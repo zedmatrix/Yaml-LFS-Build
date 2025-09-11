@@ -1,0 +1,18 @@
+package:
+    name: m4
+    version: 1.4.20
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/m4/m4-1.4.20.tar.xz
+      md5: 6eb2ebed5b24e74b6e890919331d2132
+
+prepare: |
+    ./configure --prefix=/usr --host=$LFS_TGT --build=$(build-aux/config.guess)
+
+build: |
+    make
+
+install: |
+    make DESTDIR=$LFS install

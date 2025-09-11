@@ -1,0 +1,17 @@
+package:
+    name: make-ca
+    version: 1.16.1
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/lfs-book/make-ca/archive/v1.16.1/make-ca-1.16.1.tar.gz
+      md5: bf9cea2d24fc5344d4951b49f275c595
+
+build: |
+    make install &&
+    install -vdm755 /etc/ssl/local
+
+install: |
+    /usr/sbin/make-ca -g &&
+    systemctl enable update-pki.timer

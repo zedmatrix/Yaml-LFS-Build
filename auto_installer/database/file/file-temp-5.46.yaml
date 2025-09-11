@@ -1,0 +1,24 @@
+package:
+    name: file-temp
+    version: 5.46
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://astron.com/pub/file/file-5.46.tar.gz
+      md5: 459da2d4b534801e2e2861611d823864
+
+prepare: |
+    mkdir build &&
+    pushd build &&
+    ../configure --disable-bzlib --disable-libseccomp --disable-xzlib --disable-zlib &&
+    make &&
+    popd
+
+build: |
+    ./configure --prefix=/usr --host=$LFS_TGT --build=$(./config.guess) &&
+    make FILE_COMPILE=$(pwd)/build/src/file
+
+install: |
+    make DESTDIR=$LFS install &&
+    rm -v $LFS/usr/lib/libmagic.la

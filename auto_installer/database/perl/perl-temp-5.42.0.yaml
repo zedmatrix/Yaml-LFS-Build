@@ -1,0 +1,18 @@
+package:
+    name: perl-temp
+    version: 5.42.0
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.cpan.org/src/5.0/perl-5.42.0.tar.xz
+      md5: 7a6950a9f12d01eb96a9d2ed2f4e0072
+
+build: |
+    sh Configure -des -D prefix=/usr -D vendorprefix=/usr -D useshrplib -D privlib=/usr/lib/perl5/5.42/core_perl \
+    -D archlib=/usr/lib/perl5/5.42/core_perl -D sitelib=/usr/lib/perl5/5.42/site_perl \
+    -D sitearch=/usr/lib/perl5/5.42/site_perl -D vendorlib=/usr/lib/perl5/5.42/vendor_perl \
+    -D vendorarch=/usr/lib/perl5/5.42/vendor_perl && make
+
+install: |
+    make install

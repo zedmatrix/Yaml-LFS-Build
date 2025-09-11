@@ -1,0 +1,17 @@
+package:
+    name: expat
+    version: 2.7.1
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/libexpat/libexpat/releases/download/R_2_7_1/expat-2.7.1.tar.xz
+      md5: 9f0c266ff4b9720beae0c6bd53ae4469
+
+build: |
+    ./configure --prefix=/usr --disable-static --docdir=/usr/share/doc/expat-2.7.1 &&
+    make
+
+install: |
+    make install &&
+    install -v -m644 doc/*.{html,css} /usr/share/doc/expat-2.7.1

@@ -1,0 +1,20 @@
+package:
+    name: mpfr
+    version: 4.2.2
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/mpfr/mpfr-4.2.2.tar.xz
+      md5: 7c32c39b8b6e3ae85f25156228156061
+
+prepare: |
+    ./configure --prefix=/usr --disable-static --enable-thread-safe --docdir=/usr/share/doc/mpfr-4.2.2
+
+build: |
+    make && make html &&
+    make check 2>&1 | tee mpfr-check-log
+
+install: |
+    make install && make install-html &&
+    awk '/# PASS:/{total+=$3} ; END{print total}' mpfr-check-log

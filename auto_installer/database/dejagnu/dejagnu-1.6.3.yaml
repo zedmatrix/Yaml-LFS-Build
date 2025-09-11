@@ -1,0 +1,21 @@
+package:
+    name: dejagnu
+    version: 1.6.3
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz
+      md5: 68c5208c58236eba447d7d6d1326b821
+
+prepare: |
+    mkdir -v zbuild && cd zbuild && ../configure --prefix=/usr
+
+build: |
+    cd zbuild && makeinfo --html --no-split -o doc/dejagnu.html ../doc/dejagnu.texi &&
+    makeinfo --plaintext -o doc/dejagnu.txt ../doc/dejagnu.texi
+
+install: |
+    cd zbuild && make install &&
+    install -v -dm755 /usr/share/doc/dejagnu-1.6.3 &&
+    install -v -m644 doc/dejagnu.{html,txt} /usr/share/doc/dejagnu-1.6.3

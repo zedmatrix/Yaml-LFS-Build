@@ -1,0 +1,23 @@
+package:
+    name:
+    version:
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://github.com/NetworkConfiguration/dhcpcd/releases/download/v10.2.4/dhcpcd-10.2.4.tar.xz
+      md5: ce62bc6caf02421ac40135dbb92377b5
+
+prepare: |
+    install  -v -m700 -d /var/lib/dhcpcd &&
+    groupadd -g 52 dhcpcd &&
+    useradd  -c 'dhcpcd PrivSep' -d /var/lib/dhcpcd -g dhcpcd -s /bin/false -u 52 dhcpcd &&
+    chown -v dhcpcd:dhcpcd /var/lib/dhcpcd
+
+build: |
+    ./configure --prefix=/usr --sysconfdir=/etc --libexecdir=/usr/lib/dhcpcd \
+        --dbdir=/var/lib/dhcpcd --runstatedir=/run --privsepuser=dhcpcd &&
+    make
+
+install: |
+    make install

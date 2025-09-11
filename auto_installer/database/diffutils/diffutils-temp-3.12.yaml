@@ -1,0 +1,18 @@
+package:
+    name: diffutils-temp
+    version: 3.12
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.xz
+      md5: d1b18b20868fb561f77861cd90b05de4
+
+
+build: |
+    ./configure --prefix=/usr --host=$LFS_TGT gl_cv_func_strcasecmp_works=y \
+    --build=$(./build-aux/config.guess) &&
+    make
+
+install: |
+    make DESTDIR=$LFS install

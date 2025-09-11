@@ -1,0 +1,12 @@
+package:
+    name: lfs-bootscripts
+    version: 20240825
+    rel: 1
+    archive: false
+
+sources:
+    - url: https://www.linuxfromscratch.org/lfs/downloads/12.3/lfs-bootscripts-20240825.tar.xz
+      md5: 7b078c594a77e0f9cd53a0027471c3bc
+
+install: |
+    make install
