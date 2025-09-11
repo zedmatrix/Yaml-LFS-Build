@@ -2,6 +2,9 @@
 
 ## Chapter 2
 Preparing Host System:`2-Prepare-Host-Filesystem`
+> Usage: Drive Letter /dev/sd{a, b, c, d} <br>
+> uefi - dos/mbr is default <br>
+> force - forces formatting/over-write <br>
 
 ## Chapter 4
 Create Limited Directory Layout: `4-Create-Limited-Directories`<br>
