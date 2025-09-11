@@ -13,10 +13,10 @@ tar xf lfs-stable-yaml-repos.tar.xz -C ${yrepos} --strip-components=1
 Install Ybuild (static binary)<br>
 `tar xf ybuild-static.tar.xz -C $LFS/ybuild`<br>
 > includes the Ybuild executable, ca-bundle.crt, yaml-install script
+> From this point all packages use: `./yaml-install.sh` package
 
 ## Chapter 5 - Cross Compiler
-From this point all packages use: `./yaml-install.sh` package
-Auto Script: `5-Chapter-Install`<br>
+<br>Auto Script: `5-Chapter-Install`
 `binutils-temp1 gcc-temp1 linux-headers glibc-temp1 libstdc++`
 
 ## Chapter 6 - Temporary Tools
