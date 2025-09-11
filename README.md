@@ -1,14 +1,12 @@
 # Yaml-LFS-Build
-<p>
-The pre build environment requires building `libuv`, `libarchive`, `cmake`, and `yamp-cpp`<br>
-Copying the `yaml-cpp` file into the `/mnt/lfs/tools` folder and adjusting an `ld.so.conf`.<br>
-<br>
-Having the built-in downloader requires having access to `libcurl`, `libssl` and `libcrypto` inside the chroot environment<br>
-Either by copying those libraries from the host to a temporary location or<br>
-then appending the build instructions to include: `openssl`, `libunistring`, `libidn2`, `libpsl`, `curl` as part of the temporary toolchain. Then Clean up the `/tools` as per book instructions.<br>
+## yaml Package Definition Builder
+<p>This was partially written from scratch, some code was modified from my Zbuild project such as the downloader.</p>
 
-Cross-Building `curl`, `openssl`, and `yaml-cpp` in chapter 6 after gcc-pass2.<br>
-</p><br>
+[LFS-r12.4-Stable-Repos](https://ln5.sync.com/dl/9166b41a0#3inpj6jt-8thmtii6-493i2qxx-377jjahy) <br>
+> Includes all yaml and source files for complete Systemd or Sys-V 
+
+[Ybuild Files](https://ln5.sync.com/dl/dc6b6e290#pez2iyp6-pmjdpwgr-r42nkdmb-sagxvpm6) <br>
+> Includes Static and Shared Versions, custom install wrapper and cert file 
 
 ## Linux From Scratch 
 > <ins>Chapter 5</ins><br>
@@ -24,11 +22,6 @@ binutils-temp2-2.45, gcc-temp2-15.2.0
 > <ins>Chapter 7</ins><br>
 gettext-temp-0.26, bison-temp-3.8.2, perl-temp-5.42.0, python-temp-3.13.7, texinfo-temp-7.2, util-linux-temp-2.41.1<br>
 zlib-1.3.1, nano-8.6, libunistring-1.3, libidn2-2.3.8, libpsl-0.21.5, openssl-3.5.2, wget-1.25.0 and/or curl-8.15.0
-<br>
-
-## yaml Package Definition Builder
-<p>This was partially written from scratch, some code was modified from my Zbuild project such as the downloader.
-</p>
 <br>
 
 # Checkout Other Projects
