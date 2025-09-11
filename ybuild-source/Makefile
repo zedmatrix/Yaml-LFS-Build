@@ -1,28 +1,31 @@
 CC := gcc
 CXX := g++
 CXXFLAGS := -std=c++23 -Wall -Wextra -O2
-LDFLAGS := -lcurl -lyaml-cpp #-lssl -lcrypto
+
+LDFLAGS_STATIC := -static -lcurl -lidn2 -lpsl -lunistring -lzstd -lz -lssl -lcrypto -lyaml-cpp
+LDFLAGS_SHARED := -lcurl -lyaml-cpp -lssl -lcrypto
 
 SOURCE := main.cpp
+OBJ := main.o
 
 STATIC_EXEC := Ybuild
 SHARED_EXEC := yaml-build
-STATIC := -static
+STATIC := -static -lcurl -lidn2 -lpsl -lunistring -lzstd -lz -lssl -lcrypto -lyaml-cpp
 
-${SOURCE}.o: ${SOURCE}
-	${CXX} ${CXXFLAGS} -c ${SOURCE} -o ${SOURCE}.o
+${OBJ}: ${SOURCE}
+	${CXX} ${CXXFLAGS} -c ${SOURCE} -o ${OBJ}
 
-${STATIC_EXEC}: ${SOURCE}.o
-	${CXX} ${CXXFLAGS} ${LDFLAGS} ${SOURCE}.o ${STATIC} -o ${STATIC_EXEC}
+${STATIC_EXEC}: ${OBJ}
+	${CXX} ${CXXFLAGS} ${OBJ} ${LDFLAGS_STATIC} -o ${STATIC_EXEC}
 
-${SHARED_EXEC}: ${SOURCE}.o
-	${CXX} ${CXXFLAGS} ${LDFLAGS} ${SOURCE}.o -o ${SHARED_EXEC}
+${SHARED_EXEC}: ${OBJ}
+	${CXX} ${CXXFLAGS} ${OBJ} ${LDFLAGS_SHARED} -o ${SHARED_EXEC}
 
 yaml: ${SHARED_EXEC}
 
 ybuild: ${STATIC_EXEC}
 
 clean:
-	rm -f ${SOURCE}.o ${STATIC_EXEC} ${SHARED_EXEC}
+	rm -f ${OBJ} ${STATIC_EXEC} ${SHARED_EXEC}
 
 .PHONY: clean yaml ybuild
