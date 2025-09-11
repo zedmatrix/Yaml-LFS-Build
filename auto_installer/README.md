@@ -35,7 +35,10 @@ patch-temp sed-temp tar-temp xz-temp binutils-temp2 gcc-temp2
 
 ## Chapter 7 - Extra Temp Tools
 <br>Create Final Layout: `7-5-Creating-Directories-Both`
+
 <br>Create System Files: `7-6-Create-Files_sysv-and-systemd`
+> Format system-v `export RELEASE=sysv`
+
 <br>Auto Script: `7-7-Chapter-Install`
 <br>
 ```
