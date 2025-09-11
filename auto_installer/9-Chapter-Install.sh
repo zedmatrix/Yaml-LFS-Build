@@ -10,7 +10,9 @@ for script in ${ybuild_scripts[@]}; do
     ${script} || { echo "Error in ${script}. Exiting."; break; }
 done
 
-package_list=(libtasn1 p11-kit make-ca libunistring libidn2 libpsl wget curl openssh
+[ $RELEASE == "sysv" ] && sysv="-sysv"
+
+package_list=(libtasn1 p11-kit make-ca libunistring libidn2 libpsl wget curl openssh${sysv}
  dosfstools hwdata pciutils libusb usbutils)
 
 for pkg in ${package_list[@]}; do

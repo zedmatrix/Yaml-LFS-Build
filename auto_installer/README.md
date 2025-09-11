@@ -12,11 +12,12 @@ tar xf lfs-stable-yaml-repos.tar.xz -C ${yrepos} --strip-components=1
 ```
 Install Ybuild (static binary)<br>
 `tar xf ybuild-static.tar.xz -C $LFS/ybuild`<br>
-> includes the Ybuild executable, ca-bundle.crt, yaml-install script
-> From this point all packages use: `./yaml-install.sh` package
+> includes the Ybuild executable, ca-bundle.crt, yaml-install script <br>
+> From this point all packages use: `./yaml-install.sh` package <br>
 
 ## Chapter 5 - Cross Compiler
-<br>Auto Script: `5-Chapter-Install`
+Auto Script: `5-Chapter-Install`
+<br>
 `binutils-temp1 gcc-temp1 linux-headers glibc-temp1 libstdc++`
 
 ## Chapter 6 - Temporary Tools
@@ -41,7 +42,7 @@ gettext-temp bison-temp perl-temp python-temp texinfo-temp util-linux-temp nano-
 
 ## Chapter 8 - Base System - Both
 System-V: `export RELEASE="sysv"`
-Auto Script: `8-Chapter-install`<br>
+<br>Auto Script: `8-Chapter-install`
 ```
 man-pages iana-etc glibc tzdata zlib bzip2 xz lz4 zstd file readline m4 bc
 flex tcl expect dejagnu pkgconf binutils gmp mpfr mpc attr acl libcap libxcrypt
@@ -51,8 +52,8 @@ python flit-core packaging wheel setuptools ninja meson kmod coreutils diffutils
 gawk findutils groff grub gzip iproute2 kbd libpipeline make patch tar texinfo
 nano|vim markupsafe jinja2 
 ```
-systemd: `systemd man-db procps util-linux e2fsprogs`
-systemv: `udev udev-lfs man-db-sysv procps util-linux-sysv e2fsprogs sysklogd sysvinit`
+<br>systemd: `systemd man-db procps util-linux e2fsprogs`
+<br>systemv: `udev udev-lfs man-db-sysv procps util-linux-sysv e2fsprogs sysklogd sysvinit`
 
 ## Cleanup
 ```
@@ -61,15 +62,17 @@ rm -rf /tmp/{*,.*}
 find /usr/lib /usr/libexec -name \*.la -delete
 find /usr -depth -name $(uname -m)-ybuild-linux-gnu\* | xargs rm -rf
 ```
-optional: `userdel -r tester`<br>
-
+optional: `userdel -r tester`
+<br>
 ## Chapter 9 - System Configure - systemd
-Auto Script: `9-Chapter-install`<br>
+Auto Script: `9-Chapter-install`
 ```
 ybuild-environment.sh ynetwork-files.sh yclock-locale.sh ysystem-config.sh 
 ybash-startup.sh yskel-files.sh zbuild-environment.sh
 ```
-### System Utilities
+> system-v users need to verify above scripts before auto building
+
+<br>
 ```
 libtasn1 p11-kit make-ca libunistring libidn2 libpsl wget curl openssh|openssh-sysv
 dosfstools hwdata pciutils libusb usbutils
