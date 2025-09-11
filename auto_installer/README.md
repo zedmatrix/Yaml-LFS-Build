@@ -77,8 +77,8 @@ ybuild-environment.sh ynetwork-files.sh yclock-locale.sh ysystem-config.sh
 ybash-startup.sh yskel-files.sh zbuild-environment.sh
 ```
 > system-v users need to verify above scripts before auto building
-
 <br>
+
 ```
 libtasn1 p11-kit make-ca libunistring libidn2 libpsl wget curl openssh|openssh-sysv
 dosfstools hwdata pciutils libusb usbutils
