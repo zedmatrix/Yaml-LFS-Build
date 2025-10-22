@@ -8,19 +8,28 @@ package:
 sources:
     - url:
       md5:
+      sha256:
 
 patches:
     - url:
       md5:
 
+prepare: |
+
 build: |
+
+check: |
 
 install: |
 
 final: |
 
+
 required:
-
+    -
 recommended:
-
+    -
 optional:
+    -
+
+description: ""
