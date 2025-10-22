@@ -1,0 +1,26 @@
+package:
+    name:
+    version:
+    rel: 1
+    archive: false
+    delete: true
+
+sources:
+    - url:
+      md5:
+
+patches:
+    - url:
+      md5:
+
+build: |
+
+install: |
+
+final: |
+
+required:
+
+recommended:
+
+optional:
