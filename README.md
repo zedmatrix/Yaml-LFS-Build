@@ -6,7 +6,10 @@
 > Includes all yaml and source files for complete Systemd or Sys-V 
 
 ybuild-jan-03-2026.tar.xz <br>
-> Includes Static and Shared Versions, custom install wrapper and cert file 
+> Includes Static and Shared Versions, custom install wrapper and cert file<br>
+> ` mkdir -p ybuild && cd ybuild && tar xf ybuild-jan-03-2026.tar.xz ` <br>
+> Where ever the *.yaml file is the source file is placed into subdir sources/ <br>
+> That folder is accessible using ${YSRC} inside the yaml file.
 
 ## Linux From Scratch 
 > <ins>Chapter 5</ins><br>
