@@ -73,11 +73,22 @@ bool install() {
         return false;
     }
 
+    ExecuteStatus execStatus;
+
     yprint::out(std::format("Install Executing: {}", m_install));
-    bool ret = execute(m_install);
-    if (!ret) yprint::bad("Error Installing Package");
-    return ret;
+    execStatus = execCapture(m_install);
+    if (execStatus.code != 0) {
+        yprint::bad("Error Installing Package");
+        return false;
+    }
+    std::filesystem::path logfile = m_log_dir / "package-install.log";
+    std::ofstream out(logfile);
+    for (auto& line : execStatus.output) {
+        out << line << '\n';
+    }
+    return true;
 }
+
 bool finalize() {
     if (m_final.empty()) return true;
     change_dir(m_rootPath);

@@ -3,7 +3,8 @@
 #include <sys/wait.h>
 #include <vector>
 
-bool execute(const std::filesystem::path& command) {
+std::vector<std::string> build_environment() {
+    std::vector<std::string> env_strings;
     std::string exec_path = "/usr/bin:/usr/sbin";
     auto append_if_exists = [&](const fs::path& p) {
         if (dir_exists(p)) {
@@ -11,19 +12,20 @@ bool execute(const std::filesystem::path& command) {
             exec_path += p.string();
         }
     };
-
-    std::vector<std::string> env_strings;
     env_strings.push_back("YSRC=" + m_ysrc.string());
     env_strings.push_back("ybuild_root_path=" + m_root_path.string());
     env_strings.push_back("package_path=" + m_package_path.string());
     env_strings.push_back("PKGDIR=" + m_pkgdir);
     env_strings.push_back("PKGNAME=" + m_pkgname);
     env_strings.push_back("PKGVER=" + m_pkgver);
-    if (!m_cflags.empty()) {
+    if (!m_cflags.empty() && m_pkg_cflags.empty()) {
         env_strings.push_back("CFLAGS=" + m_cflags);
         env_strings.push_back("CXXFLAGS=" + m_cflags);
     }
-
+    if (!m_pkg_cflags.empty()) {
+        env_strings.push_back("CFLAGS=" + m_pkg_cflags);
+        env_strings.push_back("CXXFLAGS=" + m_pkg_cflags);
+    }
     if (lfs) {
         env_strings.push_back("LC_ALL=POSIX");
         env_strings.push_back("LFS=" + m_lfs.string());
@@ -40,8 +42,17 @@ bool execute(const std::filesystem::path& command) {
         env_strings.push_back("PATH=" + exec_path);
         env_strings.push_back("MAKEFLAGS=-j4");
         env_strings.push_back("NINJAJOBS=4");
-    }
 
+        if (dir_exists("/opt/kf6/include")) {
+            env_strings.push_back("CPLUS_INCLUDE_PATH=/opt/kf6/include");
+        }
+    }
+    return env_strings;
+}
+
+bool execute(const std::filesystem::path& command) {
+
+    std::vector<std::string> env_strings = build_environment();
     std::vector<char*> envp;
 
     for (auto& s : env_strings) {

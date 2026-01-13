@@ -22,9 +22,11 @@ bool m_gitrepo = false;
 
 std::string m_pkgdir, m_pkgname, m_pkgver, m_archive;
 std::string m_prepare, m_build, m_check, m_install, m_final;
-std::string m_pkgurl, m_pkgmd5, m_addCert;
+std::string m_pkgurl, m_pkgmd5, m_addCert, m_pkg_cflags;
+std::string m_extract_size, m_final_size;
 
-fs::path m_build_dir, m_package_path, m_archivedir, m_ysrc;
+fs::path m_build_dir, m_log_dir, m_package_path, m_archivedir, m_ysrc;
+
 fs::path m_source_dir {"sources"};
 fs::path ant_bin = "/opt/ant/bin";
 fs::path jdk_bin = "/opt/jdk/bin";
@@ -50,6 +52,13 @@ inline const std::string m_lfstgt = [] {
         return env_p;
     }
     return "x86_64-ybuild-linux-gnu";
+}();
+//i686-ybuild-linux-gnu
+inline const std::string m_lfstgt32 = [] {
+    if (const char* env_p = std::getenv("LFS_TGT32")) {
+        return env_p;
+    }
+    return "i686-ybuild-linux-gnu";
 }();
 
 //CFLAGS="-O2 -g -fPIC";

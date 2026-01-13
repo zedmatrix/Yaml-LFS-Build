@@ -83,7 +83,7 @@ bool getSources() {
             } else {
                 yprint::bad(std::format("✖ SHA256 mismatch! - Expected: {}\nGot: {}", sha256, actual));
             }
-        } else if (!md5.empty() && md5 != "null") {
+        } else if (!md5.empty()) {
             std::string actual = compute_md5(filepath);
             if (actual == md5) {
                 yprint::good("✔ MD5 verified");
@@ -104,6 +104,7 @@ bool getSources() {
     for (const auto& src : m_config["patches"]) {
         url = src["url"].as<std::string>();
         md5 = src["md5"].as<std::string>();
+        sha256 = src["sha256"].as<std::string>();
         file = getBaseName(url);
         fs::path filepath = m_ysrc / file;
 
@@ -115,7 +116,14 @@ bool getSources() {
                 break;
             };
         }
-        if (!md5.empty()) {
+        if (!sha256.empty() && sha256 != "null") {
+            std::string actual = compute_sha256(filepath);
+            if (actual == sha256) {
+                yprint::good("✔ SHA256 verified");
+            } else {
+                yprint::bad(std::format("✖ SHA256 mismatch! - Expected: {}\nGot: {}", sha256, actual));
+            }
+        } else if (!md5.empty()) {
             std::string actual = compute_md5(filepath);
             if (actual == md5)
                 yprint::good("✔ MD5 verified");

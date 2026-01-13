@@ -21,6 +21,7 @@ void loadPackage(std::filesystem::path& package) {
     m_pkgrel = m_package["rel"].as<int>(1);
     m_zarchive = m_package["archive"].as<bool>(false);
     m_delete = m_package["delete"].as<bool>(false);
+    m_pkg_cflags = checkNode(m_package, "cflags");
 
     m_pkgdir = std::format("{}-{}", m_pkgname, m_pkgver);
     // Test Print Out
@@ -38,7 +39,17 @@ void loadPackage(std::filesystem::path& package) {
     if (m_config["sources"]) {
         m_pkgurl = m_config["sources"][0]["url"].as<std::string>();
         m_archive = getBaseName(m_pkgurl);
-        m_pkgmd5 = m_config["sources"][0]["md5"].as<std::string>();
+        const auto& src = m_config["sources"][0];
+        if (src["sha256"]) {
+            m_pkgmd5 = src["sha256"].as<std::string>();
+        }
+        else if (src["md5"]) {
+            m_pkgmd5 = src["md5"].as<std::string>();
+        }
+        else {
+            m_pkgmd5.clear();
+        }
+
         std::println("Package: {} URL:{} MD5:{}", m_archive, m_pkgurl, m_pkgmd5);
     }
 

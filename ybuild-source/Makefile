@@ -2,7 +2,7 @@ CC := gcc
 CXX := g++
 CXXFLAGS := -std=c++23 -Wall -Wextra -O2
 
-LDFLAGS_STATIC := -static -lcurl -lidn2 -lpsl -lunistring -lzstd -lz -lssl -lcrypto -lyaml-cpp -lmagic
+LDFLAGS_STATIC := -static -lcurl -lidn2 -lpsl -lunistring -lzstd -lz -lssl -lcrypto -lyaml-cpp -lmagic -llzma -lbz2
 LDFLAGS_SHARED := -lcurl -lyaml-cpp -lssl -lcrypto -lmagic
 
 SOURCE := main.cpp
