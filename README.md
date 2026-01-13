@@ -5,7 +5,7 @@
 [LFS-r12.4-Stable-Repos](https://ln5.sync.com/dl/9166b41a0#3inpj6jt-8thmtii6-493i2qxx-377jjahy) <br>
 > Includes all yaml and source files for complete Systemd or Sys-V 
 
-[Ybuild Files](https://ln5.sync.com/dl/dc6b6e290#pez2iyp6-pmjdpwgr-r42nkdmb-sagxvpm6) <br>
+ybuild-jan-03-2026.tar.xz <br>
 > Includes Static and Shared Versions, custom install wrapper and cert file 
 
 ## Linux From Scratch 
