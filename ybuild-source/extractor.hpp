@@ -1,6 +1,8 @@
 #include <magic.h>
 #include <vector>
 #include <algorithm>
+#include "Zed_Print_Header.hpp"
+
 std::vector<std::string> MIMETYPES{"Unknown", "application/x-xz", "application/gzip",
                                     "application/x-bzip2", "application/zstd", "application/zip"};
 
@@ -15,7 +17,7 @@ int filetype(std::filesystem::path& file) {
 
     const char* type = magic_file(magic, file.c_str());
     std::string mime(type);
-    std::cout << "Detected type: " << type << "\n";
+    yprintln("Detected type: {} ", type);
 
     magic_close(magic);
 
@@ -23,17 +25,17 @@ int filetype(std::filesystem::path& file) {
     return (it != MIMETYPES.end()) ? std::distance(MIMETYPES.begin(), it) : 0;
 }
 
-bool extract() {
+bool extract(Zed_Print& zp) {
 
     m_archivedir = m_ysrc / fs::path(m_archive);
     m_filetype = filetype(m_archivedir);
 
     if (m_filetype > 0 && m_filetype < 5) {
-        yprint::out(std::format("Looking For {}", tar_bin.string()));
+        yprintln("Looking For {}", tar_bin.string());
         if (file_exists(tar_bin)) {
-            yprint::good(std::format("Found {}", tar_bin.string()));
+            zp.pass(std::format("Found {}", tar_bin.string()));
         } else {
-            yprint::bad(std::format("Not Found {}", tar_bin.string()));
+            zp.fail(std::format("Not Found {}", tar_bin.string()));
             return false;
         }
 
@@ -41,21 +43,21 @@ bool extract() {
                               m_archivedir.string(), m_build_dir.string(), m_pkgrel);
 
     } else if (m_filetype == 5) {
-        yprint::out(std::format("Looking For {}", unzip_bin.string()));
+        yprintln("Looking For {}", unzip_bin.string());
         if (file_exists(unzip_bin)) {
-            yprint::good(std::format("Found {}", unzip_bin.string()));
+            zp.pass(std::format("Found {}", unzip_bin.string()));
         } else {
-            yprint::bad(std::format("Not Found {}", unzip_bin.string()));
+            zp.fail(std::format("Not Found {}", unzip_bin.string()));
             return false;
         }
 
         command = std::format("bsdunzip -d {} {}", m_build_dir.string(), m_archivedir.string());
 
     } else {
-        yprint::bad("Invalid Archive File Type Detected!");
+        zp.fail("Invalid Archive File Type Detected!");
         return false;
     }
 
-    yprint::out(std::format("Executing: {}", command.c_str()));
+    yprintln("Executing: {}", command.c_str());
     return execute(command);
 }

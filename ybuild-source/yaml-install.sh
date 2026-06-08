@@ -37,11 +37,24 @@ zbuild_wait() {
 }
 # Start of Script
 ZBefore=`date +%s`
-zmsg "Inside chroot"
-YBUILD="/ybuild/ybuild-101"
-YREPOS="/ybuild/repos"
+if [[ ! /proc/1/root/. -ef / ]]; then
+    zmsg "Inside chroot"
+    YBUILD="/ybuild/Ybuild"
+    YREPOS="/ybuild/repos"
+else
+    if [[ -z $LFS ]]; then
+        zmsg "Final - Outside chroot"
+        YBUILD="/ybuild/Ybuild"
+        YREPOS="/ybuild/repos"
+    else
+        zmsg "Bootstrap - Outside chroot"
+        YLFS="/mnt/lfs"
+        YBUILD="${YLFS}/ybuild/Ybuild"
+        YREPOS="${YLFS}/ybuild/repos"
+    fi
+fi
 
-# Find package directory
+# START - Find package directory
 echo -e ${zzcyan}
 zstars
 package=${1}

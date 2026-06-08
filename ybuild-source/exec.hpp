@@ -13,11 +13,14 @@ std::vector<std::string> build_environment() {
         }
     };
     env_strings.push_back("YSRC=" + m_ysrc.string());
-    env_strings.push_back("ybuild_root_path=" + m_root_path.string());
-    env_strings.push_back("package_path=" + m_package_path.string());
+    env_strings.push_back("YPKG=" + m_package_path.string());
+    env_strings.push_back("YBLD=" + m_root_path.string());
     env_strings.push_back("PKGDIR=" + m_pkgdir);
     env_strings.push_back("PKGNAME=" + m_pkgname);
     env_strings.push_back("PKGVER=" + m_pkgver);
+    if (m_destdir_bool) {
+        env_strings.push_back("DESTDIR=" + m_destdir.string());
+    }
     if (!m_cflags.empty() && m_pkg_cflags.empty()) {
         env_strings.push_back("CFLAGS=" + m_cflags);
         env_strings.push_back("CXXFLAGS=" + m_cflags);
@@ -26,10 +29,14 @@ std::vector<std::string> build_environment() {
         env_strings.push_back("CFLAGS=" + m_pkg_cflags);
         env_strings.push_back("CXXFLAGS=" + m_pkg_cflags);
     }
+    if (!m_ldflags.empty()) {
+        env_strings.push_back("LDFLAGS=" + m_ldflags);
+    }
     if (lfs) {
         env_strings.push_back("LC_ALL=POSIX");
         env_strings.push_back("LFS=" + m_lfs.string());
         env_strings.push_back("LFS_TGT=" + m_lfstgt);
+        env_strings.push_back("LFS_TGT32=" + m_lfstgt32);
         env_strings.push_back("CONFIG_SITE=" + (m_lfs / "usr/share/config.site").string());
         env_strings.push_back("PATH=" + (m_lfs / "tools/bin:/usr/bin:/bin:/sbin").string());
     } else {
@@ -65,7 +72,7 @@ bool execute(const std::filesystem::path& command) {
     // Test printout (optional)
     if (m_DEBUG) {
         for (auto& s : env_strings) {
-            printf("*** Setting ENV: %s \n", s.c_str());
+            yprintln(" Setting ENV: {} ", s);
         }
     }
 

@@ -26,7 +26,7 @@ int download(const std::string& view, const std::filesystem::path& filePath) {
 
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
-        std::println("Download failed: {}", curl_easy_strerror(res));
+        yprintln("Download failed: {}", curl_easy_strerror(res));
         std::filesystem::remove(filePath);
     }
 

@@ -1,35 +1,50 @@
+description: ""
+
 package:
-    name:
-    version:
-    rel: 1
-    archive: false
-    delete: true
+  name:
+  version:
+  rel: 1
+  archive: false
+  delete: true
+  cflags: ""
+  ycheck: false
+  destdir: true #/ybuild/image/${PKGDIR}
 
 sources:
-    - url:
-      md5:
-      sha256:
+  - url:
+    sha256:
+    md5:
 
 patches:
-    - url:
-      md5:
+  - url:
+    sha256:
+    md5:
 
 prepare: |
+  ./configure --prefix=/usr
+  meson setup build --prefix=/usr --buildtype=release
+  cmake -B build -G Ninja -Wno-dev
 
 build: |
+  make
+  ninja -C build
 
 check: |
+  make check
+  ninja -C build test
 
 install: |
+  make install
+  ninja -C build install
 
 final: |
-
+  /ybuild/ydest-strip-x64.sh
+  /ybuild/ydest-strip-m32.sh
 
 required:
-    -
-recommended:
-    -
-optional:
-    -
 
-description: ""
+recommended:
+
+optional:
+
+runtime:

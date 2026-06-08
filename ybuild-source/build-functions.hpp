@@ -3,19 +3,19 @@ bool applyPatches() {
         yprint::bad("Error Changing to Build Directory");
         return false;
     }
+    if (yaml_iskey_valid(m_patches, "url")) return true;
 
-    std::string url, md5, file;
-    for (const auto& patch : m_config["patches"]) {
+    std::string url, file;
+    for (const auto& patch : m_patches) {
         url = patch["url"].as<std::string>();
-        md5 = patch["md5"].as<std::string>();
-        std::println("Applying Patch:{} URL:{} MD5:{}", getBaseName(url), url, md5);
         file = getBaseName(url);
+        std::println("Applying Patch:{} URL:{}", file, url);
+
         fs::path filePath = m_ysrc / file;
         command = std::format("patch -Np1 -i {}", filePath.string());
-
         yprint::out(std::format("Executing: {}", command.c_str()));
-        bool ret = execute(command);
-        if (!ret) {
+
+        if (!execute(command)) {
             yprint::bad(std::format("Error Applying Patch: {}", file));
             return false;
         }
@@ -31,10 +31,20 @@ bool prepare() {
         return false;
     }
 
+	ExecuteStatus execStatus;
     yprint::out(std::format("Prepare Executing: {}", m_prepare));
-    bool ret = execute(m_prepare);
-    if (!ret) yprint::bad("Error Preparing Package");
-    return ret;
+    execStatus = execCapture(m_prepare);
+
+    std::filesystem::path logfile = m_log_dir / "package-prepare.log";
+    std::ofstream out(logfile);
+    for (auto& line : execStatus.output) {
+        out << line << '\n';
+    }
+    if (execStatus.code != 0) {
+        yprint::bad("Error Preparing Package");
+        return false;
+    }
+    return true;
 }
 
 bool build() {
@@ -53,6 +63,7 @@ bool build() {
 
 bool check() {
     if (m_check.empty()) return true;
+	if (!m_testsuite) return true;
     change_dir(m_rootPath);
     if (!change_dir(m_build_dir)) {
         yprint::bad("Error Changing to Build Directory");
@@ -77,14 +88,16 @@ bool install() {
 
     yprint::out(std::format("Install Executing: {}", m_install));
     execStatus = execCapture(m_install);
-    if (execStatus.code != 0) {
-        yprint::bad("Error Installing Package");
-        return false;
-    }
+
     std::filesystem::path logfile = m_log_dir / "package-install.log";
     std::ofstream out(logfile);
     for (auto& line : execStatus.output) {
         out << line << '\n';
+    }
+
+    if (execStatus.code != 0) {
+        yprint::bad("Error Installing Package");
+        return false;
     }
     return true;
 }

@@ -1,14 +1,14 @@
+#include "Zed_Print_Header.hpp"
 
-bool loadDatabase() {
+bool loadDatabase(Zed_Print& zp) {
     if (!DATABASE || DATABASE.IsNull()) {
         DATABASE = YAML::LoadFile(m_dbfile);
         if (DATABASE) {
-            yprint::good("Database Loaded");
+            zp.pass("Database Loaded");
             return true;
-        } else {
-            yprint::bad("Failed to Load Database");
         }
     }
+    zp.fail("Failed to Load Database");
     return false;
 }
 
@@ -25,12 +25,7 @@ bool check_built(const std::string& name, const std::string& ver) {
 }
 
 bool package_exists(const std::string& name, const std::string& ver) {
-    // Load existing database if present
-    if (!DATABASE || DATABASE.IsNull()) {
-        loadDatabase();
-    }
-
-    if (!DATABASE["installed"]) return false;
+	if (!yaml_iskey_valid(DATABASE, "installed")) return false;
 
     for (const auto& pkg : DATABASE["installed"]) {
         if (pkg["name"] && pkg["name"].as<std::string>() == name) {
@@ -43,7 +38,8 @@ bool package_exists(const std::string& name, const std::string& ver) {
 }
 
 bool is_installed(const std::string& name) {
-    if (!DATABASE["installed"] || !DATABASE["installed"].IsSequence()) return false;
+	if (!yaml_iskey_valid(DATABASE, "installed")) return false;
+
     for (const auto& entry : DATABASE["installed"]) {
         if (entry["name"] && entry["name"].as<std::string>() == name) {
             return true;
@@ -52,17 +48,19 @@ bool is_installed(const std::string& name) {
     return false;
 }
 
-int depend_check() {
+int depend_check(Zed_Print& zp) {
     int missing = 0;
-    for (const auto& category : {"required", "recommended", "optional"}) {
-        if (!m_config[category] || !m_config[category].IsSequence()) continue;
+    std::string name;
+    for (const auto& category : {"required", "recommended", "optional", "runtime"}) {
+    	if (!yaml_iskey_valid(m_config, category)) continue;
         for (const auto& pkg : m_config[category]) {
-            std::string name = pkg.as<std::string>();
+            name = pkg.as<std::string>();
             if (!is_installed(name)) {
-                yprint::missing(name);
-                missing += (category != std::string("optional"));
+            	zp.fail(std::format("{} Missing: {}",color(true, Color::Code::RED), name));
+            	std::string_view cat(category);
+            	if (cat != "optional" && cat != "runtime") missing ++;
             } else {
-                yprint::found(name);
+                zp.pass(name);
             }
         }
     }
@@ -72,13 +70,13 @@ int depend_check() {
 int update_db() {
     // Check for duplicate
     if (package_exists(m_pkgname, m_pkgver)) {
-        std::println("Package '{}' already exists in database, skipping.", m_pkgname);
+        yprintln("Package '{}' already exists in database, skipping.", m_pkgname);
         return 0;
     }
     // Get current date/time string
     std::time_t now = std::time(nullptr);
     char buf[100];
-    std::strftime(buf, sizeof(buf), "%d-%a-%Y %Z %H:%M:%S", std::localtime(&now));
+    std::strftime(buf, sizeof(buf), "%a %b %d-%Y %Z %H:%M:%S", std::localtime(&now));
 
     // Create package node
     YAML::Node pkg;
@@ -89,14 +87,11 @@ int update_db() {
     pkg["date"] = buf;
     // Test Print out
     for (const auto& it : pkg) {
-        std::println("{} => {}",
-                     it.first.as<std::string>(),
-                     it.second.as<std::string>()
-        );
+        yprintln("{} => {}", it.first.as<std::string>(), it.second.as<std::string>());
     }
 
     // Ensure "installed" is a sequence
-    if (!DATABASE["installed"]) {
+	if (!yaml_iskey_valid(DATABASE, "installed")) {
         DATABASE["installed"] = YAML::Node(YAML::NodeType::Sequence);
     }
 

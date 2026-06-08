@@ -13,6 +13,8 @@ yaml_cpp_dep = dependency('yaml-cpp')
 ssl_dep = dependency('openssl')
 crypto_dep = dependency('libcrypto')
 magic_dep = dependency('libmagic', required: false)
+brotli_dep = dependency('libbrotlidec')
+nghttp2_dep = dependency('libnghttp2')
 
 # If libmagic is not found via pkg-config, try finding it manually
 if not magic_dep.found()
@@ -23,41 +25,48 @@ endif
 sources = ['main.cpp']
 
 # Shared executable (yaml-build)
-shared_deps = [
-  curl_dep,
-  yaml_cpp_dep,
-  ssl_dep,
-  crypto_dep,
-  magic_dep
-]
+if get_option('shared') == true
+	shared_deps = [
+	  curl_dep,
+	  yaml_cpp_dep,
+	  ssl_dep,
+	  crypto_dep,
+	  magic_dep
+	]
 
-executable('yaml-build',
-  sources,
-  dependencies: shared_deps,
-  install: true
-)
+	executable('yaml-build',
+	  sources,
+	  dependencies: shared_deps,
+	  install: true
+	)
+endif
 
-cpp = meson.get_compiler('cpp')
 # Static executable (Ybuild)
-# For static linking, we need to specify additional dependencies
-static_deps = [
-  cpp.find_library('curl', static: true),
-  cpp.find_library('idn2', static: true),
-  cpp.find_library('psl', static: true),
-  cpp.find_library('unistring', static: true),
-  cpp.find_library('zstd', static: true),
-  cpp.find_library('z', static: true),
-  cpp.find_library('ssl', static: true),
-  cpp.find_library('crypto', static: true),
-  cpp.find_library('yaml-cpp', static: true),
-  cpp.find_library('magic', static: true),
-  cpp.find_library('lzma', static: true),
-  cpp.find_library('bz2', static: true)
-]
+if get_option('static') == true
+	cpp = meson.get_compiler('cpp')
 
-executable('Ybuild',
-  sources,
-  dependencies: static_deps,
-  link_args: ['-static'],
-  install: true
-)
+	static_deps = [
+	  cpp.find_library('curl', static: true),
+	  cpp.find_library('nghttp2', static: true),
+	  cpp.find_library('idn2', static: true),
+	  cpp.find_library('psl', static: true),
+	  cpp.find_library('unistring', static: true),
+	  cpp.find_library('zstd', static: true),
+	  cpp.find_library('brotlidec', static: true),
+	  cpp.find_library('brotlicommon', static: true),
+	  cpp.find_library('z', static: true),
+	  cpp.find_library('ssl', static: true),
+	  cpp.find_library('crypto', static: true),
+	  cpp.find_library('yaml-cpp', static: true),
+	  cpp.find_library('magic', static: true),
+	  cpp.find_library('lzma', static: true),
+	  cpp.find_library('bz2', static: true),
+	]
+
+	executable('Ybuild',
+	  sources,
+	  dependencies: static_deps,
+	  link_args: ['-static'],
+	  install: true
+	)
+endif

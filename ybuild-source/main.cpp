@@ -1,3 +1,4 @@
+#include "Zed_Print_Header.hpp"
 #include "init.hpp"
 #include "time_manager.hpp"
 #include "dir_scan.hpp"
@@ -18,10 +19,11 @@
 int main(int argc, char* argv[]/*, char* envp[]*/) {
 
     if (argc < 2) {
-        yprint::out(std::format("Usage: {} [package]", argv[0]));
+        yprintln("Usage: {} [package]", argv[0]);
         return 1;
     }
 
+    Zed_Print zp;
     TimeManager tm;
     tm.start();
 
@@ -33,10 +35,27 @@ int main(int argc, char* argv[]/*, char* envp[]*/) {
     }
 
     // Get Package Data
-    loadPackage(FILEPATH);
+    if (!loadPackage(FILEPATH)) {
+        zp.fail("Error Loading Package Definition");
+        return 127;
+    }
     m_package_path = absolutePath(FILEPATH);
-
     fs::current_path(m_package_path);
+
+    if (!loadDatabase(zp)) return 127;
+
+    if (check_built(m_pkgname, m_pkgver)) {
+        m_error_text = std::format("Package: {}-{} Is Found in Database. Skipping.", m_pkgname, m_pkgver);
+        zp.pass(m_error_text);
+        return 0;
+    }
+
+    m_DEBUG = true;
+    int m_error = depend_check(zp);
+    if (m_error != 0) {
+        zp.fail("Missing Dependencies");
+        return m_error;
+    }
 
     m_build_dir = (m_root_path / "tmp" / m_pkgdir);
     createBuildDir();
@@ -44,40 +63,39 @@ int main(int argc, char* argv[]/*, char* envp[]*/) {
     m_log_dir = (m_root_path / "log" / m_pkgdir);
     make_dir(m_log_dir);
 
-    m_ysrc = (m_package_path / m_source_dir);
+    if (m_destdir_bool) {
+        m_destdir = (m_root_path / "image" / m_pkgdir);
+        make_dir(m_destdir);
+    }
 
-    std::cout << "*** Main root: " << m_root_path << std::endl;
-    std::cout << "*** Main ysrc: " << m_ysrc << std::endl;
-    std::cout << "*** Main Build: " << m_build_dir << std::endl;
+	m_xml_dir = (m_root_path / "xml");
+    make_dir(m_xml_dir);
+    m_xml_file = m_pkgname + ".xml";
+
+    m_ysrc = (m_root_path / "sources");
     make_dir(m_ysrc);
 
-    std::println("{}", stars());
-    loadDatabase();
-    if (check_built(m_pkgname, m_pkgver)) {
-        yprint::out(std::format("Package: {}-{} Is Found in Database. Skipping.", m_pkgname, m_pkgver));
-        return 0;
-    }
+    uint16_t m_width = zp.get_width() - 3;
+    yprintln("{}", stars(m_width));
+    yprintln("*** Main  ROOT: {}", m_root_path.string());
+    yprintln("*** Main  YPKG: {}", m_package_path.string());
+    yprintln("*** Main  YSRC: {}", m_ysrc.string());
+    yprintln("*** Main BUILD: {}", m_build_dir.string());
 
-    m_DEBUG = true;
-    int m_error = depend_check();
-    if (m_error != 0) {
-        yprint::bad("Missing Dependencies");
-        return m_error;
-    }
 
     if (!getSources()) {
-        printf("Error Downloading Sources\n");
+        zp.fail("Error Downloading Sources");
         return 1;
     }
 
     if (!m_gitrepo) {
-        if (!extract()) {
-            printf("Error Extracting Sources\n");
+        if (!extract(zp)) {
+            zp.fail("Error Extracting Sources");
             return 1;
         }
     }
 
-    std::println("{}", stars());
+    yprintln("{}", stars(m_width));
     //Get Size of Extracted Directory
     FileMap m_map_extract = scan_directory(m_build_dir);
     m_extract_size = directory_size_hr(m_map_extract);
@@ -103,26 +121,36 @@ int main(int argc, char* argv[]/*, char* envp[]*/) {
     DirDiff m_package_install_diff = directory_diff(m_map_prepare, m_map_build);
     write_diff_log(m_package_install_diff, "install.log");
 
-    std::println("{}", stars());
+    yprintln("{}", stars(m_width));
 
     change_dir(m_rootPath);
     m_DEBUG = false;
     update_db();
     if (m_delete) {
-        yprint::out("Removing Build Directory");
+        yprintln("Removing Build Directory");
         std::uintmax_t files = fs::remove_all(m_build_dir);
-        yprint::good(std::format("Removed: {} Files", files));
+        yprintln(Color::Code::RED, "Removed: {} Files", files);
     } else {
-        yprint::out("Build Directory - Remains");
+        yprintln(Color::Code::BLUE, "Build Directory - Remains");
     }
     tm.stop();
 
-    //XML Print Summary
-    double baseline = 70.0; // Binutils pass1 took 68 seconds on this machine
-    print_xml_out(tm.sbu_str(baseline));
+/*      XML Print Summary
+        Binutils pass1 took 2min 31secs on this machine (154)
+        Binutils pass1 took 68 seconds on this machine (70)
+*/
+	double baseline = 154.0;
+    if (!print_xml_out(tm.sbu_str(baseline), zp)) zp.fail("XML Out returned a failure");
 
-    yprint::out(std::format("Build Time: {}", tm.hms()));
+    yprintln("Build Time: {}", tm.hms());
 
-    std::println("{}", stars());
+    //Get Size of Image Directory
+    if (m_destdir_bool) {
+	    FileMap m_final_destdir = scan_directory(m_destdir);
+	    std::string m_final_destdir_size = directory_size_hr(m_final_destdir);
+	    yprintln("Image Dir: {} Size: {}", m_destdir.string(), m_final_destdir_size);
+	}
+
+    yprintln("{}", stars(m_width));
     return 0;
 }

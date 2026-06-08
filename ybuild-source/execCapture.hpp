@@ -23,7 +23,7 @@ ExecuteStatus execCapture(const std::filesystem::path& cmd) {
     // Test printout (optional)
     if (m_DEBUG) {
         for (auto& s : env_strings) {
-            printf("*** Setting ENV: %s \n", s.c_str());
+            yprintln(" Setting ENV: {} ", s);
         }
     }
 

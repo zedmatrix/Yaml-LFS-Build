@@ -30,18 +30,15 @@ std::string extension(const std::string& str) {
 }
 
 bool getSources() {
-    if (!m_config["sources"]) {
-        yprint::bad("No Defined Sources!");
-        return false;
-    }
+	// m_sources should be a valid node definition
+	if (!m_source_bool) return false;
     bool success = true;
     bool rename;
-    yprint::out(std::format("From getSources: {}", m_ysrc.string()));
-    make_dir(m_ysrc);
+
     std::string url, md5, sha256, file, ext;
     fs::path filepath;
     int idx = 0;
-    for (const auto& src : m_config["sources"]) {
+    for (const auto& src : m_sources) {
         url = src["url"].as<std::string>();
         rename = src["rename"].as<bool>(false);
         m_gitrepo = false;
@@ -98,10 +95,10 @@ bool getSources() {
     }
 
     time_delay(1);
-    if (!m_config["patches"]) {
-        return true;
-    }
-    for (const auto& src : m_config["patches"]) {
+    // Skip if no patches section
+	if (!m_patch_bool) return true;
+
+    for (const auto& src : m_patches) {
         url = src["url"].as<std::string>();
         md5 = src["md5"].as<std::string>();
         sha256 = src["sha256"].as<std::string>();

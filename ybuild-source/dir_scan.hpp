@@ -11,22 +11,17 @@ using FileMap = std::unordered_map<std::string, uintmax_t>;
 
 struct HumanReadable {
     std::uintmax_t size{};
-
     template<typename Os>
     friend Os& operator<<(Os& os, HumanReadable hr)
     {
         static constexpr char suffixes[] = "BKMG";
-
         int i = 0;
         double mantissa = static_cast<double>(hr.size);
-
-        while (mantissa >= 1024.0 && i < 1) {
+        while (mantissa >= 1024.0 && i < 3) {  // Changed from i < 1 to i < 3
             mantissa /= 1024.0;
             ++i;
         }
         os << std::ceil(mantissa * 10.0) / 10.0 << suffixes[i];
-        //if (i > 0) os << "B (" << hr.size << ')';
-
         return os;
     }
 };
